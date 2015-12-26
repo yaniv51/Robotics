@@ -13,6 +13,8 @@ using namespace std;
 
 typedef vector<vector<bool> > Grid;
 
+typedef pair<int, int> Point;
+
 class Map {
 private:
 	vector<unsigned char> image;
@@ -29,6 +31,8 @@ private:
 
 	void buildFineGrid();
 	void buildCoarseGrid();
+	void inflationCell(Grid &newMap, int row, int column, int radius);
+	void inflationRectangle(Grid &newMap, Point point1, Point point2);
 
 	bool checkIfCellIsOccupied(int i, int j);
 	void printGrid(const Grid &grid) const;

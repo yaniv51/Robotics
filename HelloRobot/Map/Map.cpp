@@ -37,6 +37,7 @@ void Map::loadMapFromFile(const char* filePath) {
 	}
 
 	printGrid(map);
+	inflateObstacles();
 }
 
 bool Map::checkIfCellIsOccupied(int i, int j) {
@@ -62,7 +63,46 @@ void Map::printGrid(const Grid &grid) const {
 }
 
 void Map::inflateObstacles() {
+	//TODO: need to check if realy works (by debug)
+	for (unsigned int i = 0; i < mapHeight; i++) {
+		for (unsigned int j = 0; j < mapWidth; j++)
+		{
+			if(map[i][j] == true)
+			{
+				inflationCell(map, (int)i, (int)j, inflationRadius);
+			}
+		}
+	}
+	printGrid(map);
+}
 
+void Map::inflationCell(Grid &newMap, int row, int column, int radius)
+{
+	Point upPoint;
+	Point downPoint;
+
+	upPoint.first = row-radius;
+	upPoint.second = column-radius;
+	if(upPoint.first < 0)
+		upPoint.first = 0;
+	if(upPoint.second < 0)
+		upPoint.second = 0;
+
+	downPoint.first = row+radius;
+	downPoint.second = column + radius;
+	if(downPoint.first >= (int)mapHeight)
+		downPoint.first = (int)mapHeight - 1;
+	if(downPoint.second >= (int)mapWidth)
+		downPoint.second = (int)mapWidth -1;
+
+	inflationRectangle(newMap, upPoint, downPoint);
+}
+
+void Map::inflationRectangle(Grid &newMap, Point point1, Point point2)
+{
+	for(int i = point1.first; i< point2.first; i++)
+		for(int j=point1.first; j<point2.first; j++)
+			newMap[i][j] = true;
 }
 
 Map::~Map() {
