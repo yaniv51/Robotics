@@ -29,13 +29,14 @@ private:
 	Grid fineGrid; // cell size equal to robot size
 	Grid coarseGrid; // cell size is 4*robot size
 
-	void buildFineGrid();
 	void buildCoarseGrid();
 	void inflationCell(Grid &newMap, int row, int column, int radius);
-	void inflationRectangle(Grid &newMap, Point point1, Point point2);
-
+	bool checkIdBorderValid(int row,int column);
 	bool checkIfCellIsOccupied(int i, int j);
 	void printGrid(const Grid &grid) const;
+	void createFineGrid();
+	bool isFindAreaOccupied(int row, int column);
+	Grid copyGrid(const Grid &grid);
 
 public:
 	Map(float mapResolution, float robotSize);
