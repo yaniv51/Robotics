@@ -26,6 +26,7 @@ void Map::loadMapFromFile(const char* filePath) {
 
 	cout << "map size: " << mapWidth << "," << mapHeight << endl;
 
+
 	map.resize(mapHeight);
 	for (unsigned int i = 0; i < mapHeight; i++)
 		map[i].resize(mapWidth);
@@ -36,9 +37,43 @@ void Map::loadMapFromFile(const char* filePath) {
 		}
 	}
 
-	//printGrid(map);
+	printGrid(map);
 	inflateObstacles();
+	printGrid(map);
 	createFineGrid();
+	printGrid(fineGrid);
+	//createCoarseGrid();
+	//printGrid(coarseGrid);
+}
+
+void Map::saveMapToFile(const Grid& grid, const char* path)
+{
+	/*vector<unsigned char> newImage;
+
+	newImage.resize(grid.size() * grid[0].size() * 4);
+
+	int r, g, b, c;
+	for (unsigned int i = 0; i < grid.size(); i++) {
+		for (unsigned int j = 0; j < grid[0].size(); j++) {
+			{
+				c = (i * grid[0].size() + j) * 4;
+				if(grid[i][j])
+				{
+					image[c] = 0;
+					image[c+1] = 0;
+					image[c+2] = 0;
+				}
+				else
+				{
+					image[c] = 255;
+					image[c+1] = 255;
+					image[c+2] = 255;
+				}
+			}
+		}
+	}
+	lodepng::encode(path, newImage, grid[0].size(), grid.size());
+	lodepng::save_file(newImage, path);*/
 }
 
 bool Map::checkIfCellIsOccupied(int i, int j) {
@@ -73,61 +108,100 @@ void Map::inflateObstacles() {
 					inflationCell(map, i, j, inflationRadius);
 			}
 		}
-		printGrid(map);
 }
 
 void Map::createFineGrid()
 {
-	int totalFineRows, totalFineColumns, i, j, currentFineRows, currentFineColumns;
-	bool foundObstacle;
+	int totalFineRows, totalFineColumns, i;
 
 	totalFineRows =(map.size()/robotSizeInCells);
 	totalFineColumns =(map[0].size()/robotSizeInCells);
-	//resize grid
-	fineGrid.resize(totalFineRows);
-	for(int i=0;i<totalFineRows;i++)
-		fineGrid[i].resize(totalFineColumns);
 	cout<<"robot size in cell: "<<robotSize<<endl;
 	cout<<"fine grid size: rows: "<<totalFineRows<<" columns: "<<totalFineColumns<<endl;
+	//resize grid
+	initializeGrid(totalFineRows, totalFineColumns, fineGrid);
 
-	currentFineColumns = 0;
-	currentFineRows = 0;
+	createNewGrid(robotSizeInCells, fineGrid, map);
+}
 
-	for(i = 0; i<(int)(map.size()-robotSizeInCells); i+=robotSizeInCells)
+void Map::createCoarseGrid()
+{
+	int totalCoarseRows, totalCoarseColumns;
+	int i, factor;
+
+	factor = 2;
+	//building the coarse grid - divide by 2 fine grid for resize map
+	totalCoarseRows = fineGrid.size()/factor;
+	totalCoarseColumns = fineGrid[0].size()/factor;
+
+	initializeGrid(totalCoarseRows, totalCoarseColumns, coarseGrid);
+
+	cout<<"Coarse grid size: rows: "<<totalCoarseRows<<" columns: "<<totalCoarseColumns<<endl;
+
+	createNewGrid(factor, coarseGrid, fineGrid);
+}
+
+void Map::createNewGrid(int radiusFactor, Grid& newGrid, const Grid& oldGrid)
+{
+	int totalRows, totalColumns, currentRow, currentColomn;
+	int i, j;
+	int oldRow, oldColumn;
+	bool foundObstacle;
+
+	totalRows = newGrid.size();
+	totalColumns = newGrid[0].size();
+
+	currentRow = 0;
+	currentColomn = 0;
+
+	oldRow = (int)(oldGrid.size() - radiusFactor);
+	oldColumn = (int)(oldGrid[0].size() - radiusFactor);
+	for(i = 0; i< oldRow; i+=radiusFactor)
 	{
-		for(j= 0; j< (int)(map[0].size()-robotSizeInCells); j+=robotSizeInCells)
+		for(j = 0; j<oldColumn; j+=radiusFactor)
 		{
-			foundObstacle = isFindAreaOccupied(i, j);
+			foundObstacle = isFindAreaOccupied(i, j, radiusFactor, oldGrid);
 
-			if(currentFineColumns < totalFineColumns)
+			if(currentColomn < totalColumns)
 			{
-				fineGrid[currentFineRows][currentFineColumns] = foundObstacle;
-				currentFineColumns++;
+				newGrid[currentRow][currentColomn] = foundObstacle;
+				currentColomn++;
 			}
 			else
 			{
-				currentFineColumns = 0;
-				currentFineRows++;
-				if(currentFineRows >= totalFineRows)
+				currentColomn = 0;
+				currentRow++;
+				if(currentRow >= totalRows)
 					break;
-				fineGrid[currentFineRows][currentFineColumns] = foundObstacle;
+				newGrid[currentRow][currentColomn] = foundObstacle;
 			}
 		}
 	}
-	printGrid(fineGrid);
 }
 
-bool Map::isFindAreaOccupied(int row, int column)
+void Map::initializeGrid(int rows, int columns, Grid& grid)
+{
+	int i, j;
+	grid.resize(rows);
+	for (i = 0; i < columns; i++)
+		grid[i].resize(columns);
+
+	for(i = 0; i<grid.size(); i++)
+		for(j=0; j<grid[0].size(); j++)
+			grid[i][j] = true;
+}
+
+bool Map::isFindAreaOccupied(int row, int column, int radius, const Grid& grid)
 {
 	int i, j;
 	bool foundObstacle;
-
 	foundObstacle = false;
-	for(i = 0; i <robotSizeInCells; i++)
+
+	for(i = 0; i <radius && row+i < grid.size(); i++)
 	{
-		for(j = 0; j < robotSizeInCells; j++)
+		for(j = 0; j < radius && column+j < grid[j].size(); j++)
 		{
-				if(map[row+i][column+j]==true)
+				if(grid[row+i][column+j]==true)
 				{
 					foundObstacle=true;
 					break;
@@ -143,13 +217,13 @@ bool Map::isFindAreaOccupied(int row, int column)
 Grid Map::copyGrid(const Grid &grid)
 {
 	Grid copy;
-	copy.resize(map.size());
+	copy.resize(grid.size());
 	for (unsigned int i = 0; i < mapHeight; i++)
-		copy[i].resize(map[i].size());
+		copy[i].resize(grid[i].size());
 
 	for (unsigned int i = 0; i < mapHeight; i++) {
 		for (unsigned int j = 0; j < mapWidth; j++) {
-			copy[i][j] = map[i][j];
+			copy[i][j] = grid[i][j];
 		}
 	}
 
@@ -188,8 +262,8 @@ void Map::inflationCell(Grid &newMap, int row, int column, int radius)
 }
 
 Map::~Map() {
-	// TODO Auto-generated destructor stub
-
-	// delete[] image????
+	map.clear();
+	fineGrid.clear();
+	coarseGrid.clear();
 }
 
