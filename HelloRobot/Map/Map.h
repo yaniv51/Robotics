@@ -39,7 +39,6 @@ private:
 	bool isFindAreaOccupied(int row, int column, int radius, const Grid& grid);
 	void initializeGrid(int rows, int columns, Grid& grid);
 	Grid copyGrid(const Grid &grid);
-	void saveMapToFile(const Grid& grid, const char* path);
 
 public:
 	Map(float mapResolution, float robotSize);

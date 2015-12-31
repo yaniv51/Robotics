@@ -37,43 +37,13 @@ void Map::loadMapFromFile(const char* filePath) {
 		}
 	}
 
-	printGrid(map);
+	//printGrid(map);
 	inflateObstacles();
-	printGrid(map);
+	//printGrid(map);
 	createFineGrid();
 	printGrid(fineGrid);
-	//createCoarseGrid();
-	//printGrid(coarseGrid);
-}
-
-void Map::saveMapToFile(const Grid& grid, const char* path)
-{
-	/*vector<unsigned char> newImage;
-
-	newImage.resize(grid.size() * grid[0].size() * 4);
-
-	int r, g, b, c;
-	for (unsigned int i = 0; i < grid.size(); i++) {
-		for (unsigned int j = 0; j < grid[0].size(); j++) {
-			{
-				c = (i * grid[0].size() + j) * 4;
-				if(grid[i][j])
-				{
-					image[c] = 0;
-					image[c+1] = 0;
-					image[c+2] = 0;
-				}
-				else
-				{
-					image[c] = 255;
-					image[c+1] = 255;
-					image[c+2] = 255;
-				}
-			}
-		}
-	}
-	lodepng::encode(path, newImage, grid[0].size(), grid.size());
-	lodepng::save_file(newImage, path);*/
+	createCoarseGrid();
+	printGrid(coarseGrid);
 }
 
 bool Map::checkIfCellIsOccupied(int i, int j) {
@@ -112,7 +82,7 @@ void Map::inflateObstacles() {
 
 void Map::createFineGrid()
 {
-	int totalFineRows, totalFineColumns, i;
+	int totalFineRows, totalFineColumns;
 
 	totalFineRows =(map.size()/robotSizeInCells);
 	totalFineColumns =(map[0].size()/robotSizeInCells);
@@ -126,8 +96,7 @@ void Map::createFineGrid()
 
 void Map::createCoarseGrid()
 {
-	int totalCoarseRows, totalCoarseColumns;
-	int i, factor;
+	int totalCoarseRows, totalCoarseColumns, factor;
 
 	factor = 2;
 	//building the coarse grid - divide by 2 fine grid for resize map
@@ -174,6 +143,7 @@ void Map::createNewGrid(int radiusFactor, Grid& newGrid, const Grid& oldGrid)
 				if(currentRow >= totalRows)
 					break;
 				newGrid[currentRow][currentColomn] = foundObstacle;
+				currentColomn++;
 			}
 		}
 	}
@@ -186,8 +156,8 @@ void Map::initializeGrid(int rows, int columns, Grid& grid)
 	for (i = 0; i < columns; i++)
 		grid[i].resize(columns);
 
-	for(i = 0; i<grid.size(); i++)
-		for(j=0; j<grid[0].size(); j++)
+	for(i = 0; i<(int)grid.size(); i++)
+		for(j=0; j<(int)grid[0].size(); j++)
 			grid[i][j] = true;
 }
 
@@ -197,9 +167,9 @@ bool Map::isFindAreaOccupied(int row, int column, int radius, const Grid& grid)
 	bool foundObstacle;
 	foundObstacle = false;
 
-	for(i = 0; i <radius && row+i < grid.size(); i++)
+	for(i = 0; i <radius && row+i < (int)grid.size(); i++)
 	{
-		for(j = 0; j < radius && column+j < grid[j].size(); j++)
+		for(j = 0; j < radius && column+j < (int)grid[j].size(); j++)
 		{
 				if(grid[row+i][column+j]==true)
 				{
