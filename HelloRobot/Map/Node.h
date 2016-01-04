@@ -9,14 +9,21 @@
 #define NODE_H_
 
 #include <vector>
+#include <iostream>
 using namespace std;
 
 class Node {
+
+
 public:
+	typedef vector<vector<Node*> > Graph;
+
 	vector<Node *> neighborsInTree;
 	int row, col;
 	bool visited;
-	Node(int row, int col);
+	bool isWall;
+	Node(int row, int col, bool isWall);
+	vector<Node*> getAllPossibleMves(const Graph& map);
 	virtual ~Node();
 };
 

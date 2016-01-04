@@ -44,6 +44,8 @@ public:
 	Map(float mapResolution, float robotSize);
 	void loadMapFromFile(const char* filePath);
 	void inflateObstacles();
+	Grid& getCoarseGrid(){return coarseGrid;};
+
 	virtual ~Map();
 };
 

@@ -20,14 +20,15 @@ class STC {
 private:
 	Map &map;
 	Position initialRobotPos;
-	vector<vector<Node *> > graph;
+	Node::Graph graph;
 
-	void buildGraph();
-	void DFS(Node *node);
+	void DFS(Node *node, const Node::Graph& myGraph);
+	void printGraph(const Node::Graph& myGraph);
 
 
 public:
 	STC(Map &map, Position initialRobotPos);
+	void buildGraph();
 	void buildSpanningTree();
 	void drawSpanningTree();
 	virtual ~STC();
