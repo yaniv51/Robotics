@@ -19,7 +19,7 @@ void ObstacleAvoidance::CheckObstacle()
 	int obstacleIndex;
 	bool hasFrontObstacleAfterRotate;
 
-	hasFrontObstacle = !laserHelper->CanMoveForward();
+	hasFrontObstacle = !laserHelper->CanMoveForward(MIN_DEST_FROM_OBSTACLE);
 	if(hasFrontObstacle)
 	{
 		//get obstacle information
@@ -42,7 +42,7 @@ void ObstacleAvoidance::CheckObstacle()
 			while(hasFrontObstacleAfterRotate)
 			{
 				robot->Refresh();
-				hasFrontObstacleAfterRotate = !laserHelper -> CanMoveForward();
+				hasFrontObstacleAfterRotate = !laserHelper -> CanMoveForward(MIN_DEST_FROM_OBSTACLE);
 			}
 			robot->SetSpeed(LINEAR_SPEED, 0);
 			//cout<<"moving right"<<endl;
@@ -55,7 +55,7 @@ void ObstacleAvoidance::CheckObstacle()
 			while(hasFrontObstacleAfterRotate)
 			{
 				robot->Refresh();
-				hasFrontObstacleAfterRotate = !laserHelper -> CanMoveForward();
+				hasFrontObstacleAfterRotate = !laserHelper -> CanMoveForward(MIN_DEST_FROM_OBSTACLE);
 			}
 			robot->SetSpeed(LINEAR_SPEED, 0);
 			//cout<<"moving left"<<endl;

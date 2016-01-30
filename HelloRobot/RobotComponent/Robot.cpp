@@ -52,6 +52,16 @@ void Robot::Refresh()
 	pc -> Read();
 }
 
+bool Robot::canMoveForward(float distance)
+{
+	return laserHelper->CanMoveForward(distance);
+}
+
+bool Robot::canRotate()
+{
+	return laserHelper->canRotate();
+}
+
 Robot::~Robot()
 {
 	delete sp;

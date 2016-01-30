@@ -35,6 +35,8 @@ public:
 	double GetYaw();
 	void SetSpeed(double forward, double angular);
 	void Refresh();
+	bool canRotate();
+	bool canMoveForward(float distance = MIN_DEST_FROM_OBSTACLE);
 	Laser* GetLaserHelper() {return laserHelper;}
 	virtual ~Robot();
 };

@@ -36,9 +36,9 @@ double Laser::GetRightRank()
 	return sum;
 }
 
-bool Laser::CanMoveForward()
+bool Laser::CanMoveForward(float minForwardDistance)
 {
-	double minForwardDistance = 0.5;
+	//double minForwardDistance = 0.5;
 
 	bool canMoveForward = true;
 	for (unsigned int index = LASER_MIN_FORWARD_START_INDEX; index < LASER_MIN_FORWARD_END_INDEX; index++)
@@ -64,6 +64,28 @@ double Laser::ConverIndexToDegree(int index)
 int Laser::ConvertDegreeToIndex(double degree)
 {
 	return ( degree + LASER_MID_ANGLE )/LASER_RESOLUTION;
+}
+
+bool Laser::canRotate()
+{
+	double minRotationDistance ;
+	bool canRotate;
+
+	canRotate = true;
+	minRotationDistance = LASER_MIN_ROTATION_DISTANCE;
+
+	for (unsigned int index = 0; index < (*lp).GetCount(); index++)
+	{
+		double distance = (*lp)[index];
+
+		if (distance < minRotationDistance)
+		{
+			canRotate = false;
+			break;
+		}
+	}
+
+	return canRotate;
 }
 
 Laser::~Laser() {

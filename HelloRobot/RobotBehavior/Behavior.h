@@ -7,12 +7,16 @@
 
 #ifndef BEHAVIOR_H_
 #define BEHAVIOR_H_
-#include "../Robot.h"
+#include "../RobotComponent/Robot.h"
+#include "../RobotComponent/RobotSettings.h"
+
 class Behavior {
+
 protected:
 	Robot* _robot;
 	Behavior** _next;
 	int _sizeOfNext;
+
 public:
 	Behavior(Robot* robot);
 	virtual bool startCond()=0;

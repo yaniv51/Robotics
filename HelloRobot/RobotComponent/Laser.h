@@ -23,9 +23,10 @@ public:
 	Laser(LaserProxy* laser);
 	double ConverIndexToDegree(int index);
 	int ConvertDegreeToIndex(double degree);
-	bool CanMoveForward();
+	bool CanMoveForward(float minForwardDistance);
 	double GetRightRank();
 	double GetLeftRank();
+	bool canRotate();
 	int GetLastObstacleIndex() {return lastObstacleIndex;}
 
 	virtual ~Laser();

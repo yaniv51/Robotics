@@ -9,6 +9,7 @@
 #define OBSTACLEAVOIDANCE_H_
 #include "../RobotComponent/Robot.h"
 #include "../Helper/MathHelper.h"
+#include "../RobotComponent/RobotSettings.h"
 
 class ObstacleAvoidance {
 private:
