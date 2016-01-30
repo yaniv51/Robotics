@@ -1,6 +1,6 @@
 #include <iostream>
 #include "RobotComponent/Robot.h"
-#include "RobotBehavior/ObstacleAvoidance.h"
+#include "Plans/ObstacleAvoidance.h"
 #include "RobotComponent/RobotSettings.h"
 #include "RobotManager.h"
 #include "Map/Map.h"
