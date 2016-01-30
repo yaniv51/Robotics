@@ -21,6 +21,7 @@ int main(int argc, char** argv)
 	Map map(mapResolution, robotSize);
 	Position pos(7,2);
 
+
 	const char *filePath = "roboticLabMap.png";
 	map.loadMapFromFile(filePath);
 
