@@ -14,21 +14,23 @@ using namespace std;
 
 typedef pair<int, int> Position;
 
+
 class Node {
 private:
-	Node* cameFrom;
+
 
 public:
-	typedef vector<vector<Node*> > Graph;
-
 	vector<Node *> neighborsInTree;
 	int row, col;
 	bool visited;
 	bool isWall;
+	Node* cameFrom;
+	typedef vector<vector<Node*> > Graph;
+
 	Node(int row, int col, bool isWall);
-	vector<Node*> getAllPossibleMves(const Graph& map);
 	Position getPosition();
 	void setCameFrom(Node* father) {cameFrom = father;}
+	void addNeighbor(Node* newNeighbor);
 	virtual ~Node();
 };
 

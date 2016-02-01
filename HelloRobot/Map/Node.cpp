@@ -12,63 +12,11 @@ Node::Node(int row, int col, bool isWallT) : row(row), col(col)
 	isWall = isWallT;
 	visited = false;
 	cameFrom = NULL;
-	//cout<<"create node: "<<row<<","<<col<<"is wall: "<<isWallT<<endl;
 }
 
-vector<Node*> Node::getAllPossibleMves(const Graph& map)
+void Node::addNeighbor(Node* newNeighbor)
 {
-	if(neighborsInTree.size() > 0)
-		return neighborsInTree;
-	cout<<"("<<row<<","<<col<<")"<<" neighbors: ";
-
-	//right
-	if(col+1 < (int)map[0].size())
-	{
-		if(!(map.at(row).at(col+1)->isWall) && !map.at(row).at(col+1)->visited)
-		{
-			neighborsInTree.push_back(map.at(row).at(col+1));
-			map.at(row).at(col+1)->setCameFrom(this);
-			cout<<","<<"("<<row<<","<<(col+1)<<")";
-		}
-	}
-
-	//up
-	if(row-1 > -1)
-	{
-		if(!(map.at(row-1).at(col)->isWall) && !(map.at(row-1).at(col)->visited))
-		{
-			neighborsInTree.push_back(map.at(row-1).at(col));
-			map.at(row-1).at(col)->setCameFrom(this);
-			cout<<","<<"("<<row-1<<","<<col<<")";
-		}
-	}
-
-	//left
-	if(col-1 > -1)
-	{
-		if(!(map.at(row).at(col-1)->isWall) && !(map.at(row).at(col-1)->visited))
-		{
-			neighborsInTree.push_back(map.at(row).at(col-1));
-			map.at(row).at(col-1)->setCameFrom(this);
-			cout<<","<<"("<<row<<","<<(col-1)<<")";
-		}
-	}
-
-	//down
-	if(row+1 < (int)map.size())
-	{
-		if(!(map.at(row+1).at(col)->isWall) && !(map.at(row+1).at(col)->visited))
-		{
-			neighborsInTree.push_back(map.at(row+1).at(col));
-			map.at(row+1).at(col)->setCameFrom(this);
-			cout<<","<<"("<<row+1<<","<<col<<")";
-		}
-	}
-
-
-
-	cout<<endl;
-	return neighborsInTree;
+	neighborsInTree.push_back(newNeighbor);
 }
 
 Position Node::getPosition()

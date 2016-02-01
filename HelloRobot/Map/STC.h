@@ -26,10 +26,13 @@ private:
 	Path path;
 
 	void DFS(Node *node, const Node::Graph& myGraph);
+	void DFSwithClock(Node *node, const Node::Graph& myGraph);
+	void DFSagainstClock(Node *node, const Node::Graph& myGraph);
 	void printGraph(const Node::Graph& myGraph);
 	void printDFS();
-	bool isDifferentDirection(Position oldPos, Position lastPos, Position newPos);
 	void buildGraphByGrid(const Grid& grid, Node::Graph& graph);
+	void printFullPath();
+	void buildSTCPath(Node* currentPos);
 
 public:
 	STC(Map &map, Position initialRobotPos);
@@ -37,7 +40,6 @@ public:
 	void buildSpanningTree();
 	void drawSpanningTree();
 	void buildFineGraph(const Grid& fineGrid);
-	void buildSTCPath();
 	Path getPath() {return path;}
 	Position getInitialRobotPosition() {return initialRobotPos;}
 	Node::Graph& getCoarseGraph(){return coarseGraph;}

@@ -27,7 +27,6 @@ private:
 	float robotSize;
 	int robotSizeInCells;
 	int inflationRadius;
-
 	Grid fineGrid; // cell size equal to robot size
 	Grid coarseGrid; // cell size is 4*robot size
 

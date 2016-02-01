@@ -41,9 +41,9 @@ void Map::loadMapFromFile(const char* filePath) {
 	inflateObstacles();
 	//printGrid(map);
 	createFineGrid();
-	printGrid(fineGrid);
+	//printGrid(fineGrid);
 	createCoarseGrid();
-	printGrid(coarseGrid);
+	//printGrid(coarseGrid);
 }
 
 bool Map::checkIfCellIsOccupied(int i, int j) {
