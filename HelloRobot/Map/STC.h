@@ -15,15 +15,18 @@
 using namespace std;
 
 typedef pair<int, int> Position;
+typedef vector<Position> Path;
 
 class STC {
 private:
 	Map &map;
 	Position initialRobotPos;
 	Node::Graph graph;
+	Path path;
 
 	void DFS(Node *node, const Node::Graph& myGraph);
 	void printGraph(const Node::Graph& myGraph);
+	void printDFS();
 
 
 public:
@@ -31,6 +34,9 @@ public:
 	void buildGraph();
 	void buildSpanningTree();
 	void drawSpanningTree();
+	void buildSTCPath();
+	Path getPath() {return path;}
+	Position getInitialRobotPosition() {return initialRobotPos;}
 	virtual ~STC();
 };
 

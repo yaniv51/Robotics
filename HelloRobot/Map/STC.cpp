@@ -33,16 +33,20 @@ void STC::buildGraph()
 	i = initialRobotPos.first;
 	j = initialRobotPos.second;
 
-	printGraph(graph);
-
 	if(graph.at(i).at(j))
 	{
 		graph.at(i).at(j)->getAllPossibleMves(graph);
+		//path.push_back(graph[i][j]->getPosition());
 		DFS(graph[i][j], graph);
 	}
+	printGraph(graph);
+	buildSTCPath();
+
 }
 
 void STC::DFS(Node *node, const Node::Graph& myGraph) {
+	if(!node->visited)
+		path.push_back(node->getPosition());
 	node->visited = true;
 	for(vector<Node*>::iterator itBegin = node->neighborsInTree.begin();
 			itBegin != node->neighborsInTree.end(); itBegin++)
@@ -50,12 +54,16 @@ void STC::DFS(Node *node, const Node::Graph& myGraph) {
 		if(!(*itBegin)->visited)
 		{
 			//get all possible moves for current node
-			// Add tree edge between node and neighbor
+			//Add tree edge between node and neighbor
+
+			//path.push_back((*node->neighborsInTree.begin())->getPosition());
 			(*itBegin)->getAllPossibleMves(myGraph);
 			DFS((*itBegin), myGraph);
+			//path.push_back((*node->neighborsInTree.begin())->getPosition());
 		}
 	}
-	cout<<"end ("<<node->row<<","<<node->col<<")"<<endl;
+	path.push_back(node->getPosition());
+	//cout<<"end ("<<node->row<<","<<node->col<<")"<<endl;
 }
 
 void STC::printGraph(const Node::Graph& myGraph)
@@ -64,15 +72,28 @@ void STC::printGraph(const Node::Graph& myGraph)
 	int cols = myGraph[0].size();
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols; j++) {
-			cout << (myGraph[i][j]->isWall ? "*" : " ");
+			cout << (myGraph[i][j]->isWall ? "*" : (myGraph[i][j]->visited ? "+" : " "));
 		}
 		cout << endl;
 	}
 }
+
+void STC::buildSTCPath()
+{
+	cout<<"STC path:"<<endl;
+	for(unsigned int i=0; i<path.size(); i++)
+	{
+		cout<<"["<<path[i].first<<","<<path[i].second<<"] ->";
+	}
+	cout<<endl;
+
+}
+
 
 STC::~STC() {
 	for(int i= 0; i<(int)graph.size(); i++)
 		for(int j=0; j<(int)graph[0].size(); j++)
 			delete(graph[i][j]);
 	graph.clear();
+	path.clear();
 }

@@ -57,6 +57,16 @@ bool Map::checkIfCellIsOccupied(int i, int j) {
 	return false;
 }
 
+Point Map::convertPointToFinePoint(int col, int row)
+{
+	int x, y;
+	x = row / robotSizeInCells;
+	y = col / robotSizeInCells;
+	x/=2;
+	y/=2;
+	return Point(x, y);
+}
+
 void Map::printGrid(const Grid &grid) const {
 	int rows = grid.size();
 	int cols = grid[0].size();

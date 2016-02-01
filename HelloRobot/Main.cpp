@@ -19,7 +19,8 @@ int main(int argc, char** argv)
 	float mapResolution = 0.025;
 	float robotSize = 0.3;
 	Map map(mapResolution, robotSize);
-	Position pos(7,2);
+	Position pos = map.convertPointToFinePoint(362, 305);
+	cout<<"start point: "<<"["<<pos.first<<","<<pos.second<<"]"<<endl;
 
 
 	const char *filePath = "roboticLabMap.png";

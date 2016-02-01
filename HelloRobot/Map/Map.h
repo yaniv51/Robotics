@@ -45,7 +45,7 @@ public:
 	void loadMapFromFile(const char* filePath);
 	void inflateObstacles();
 	Grid& getCoarseGrid(){return coarseGrid;};
-
+	Point convertPointToFinePoint(int row, int col);
 	virtual ~Map();
 };
 

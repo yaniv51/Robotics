@@ -12,8 +12,11 @@
 #include <iostream>
 using namespace std;
 
-class Node {
+typedef pair<int, int> Position;
 
+class Node {
+private:
+	Node* cameFrom;
 
 public:
 	typedef vector<vector<Node*> > Graph;
@@ -24,6 +27,8 @@ public:
 	bool isWall;
 	Node(int row, int col, bool isWall);
 	vector<Node*> getAllPossibleMves(const Graph& map);
+	Position getPosition();
+	void setCameFrom(Node* father) {cameFrom = father;}
 	virtual ~Node();
 };
 
