@@ -28,6 +28,7 @@ int main(int argc, char** argv)
 
 	STC stc(map, pos);
 	stc.buildGraph();
+	map.addPathToFile("MapWithPath.png", stc.getCoarseGraph(), stc.getGraphColumns(), stc.getGraphRows());
 	/*
 	Robot robot("localhost", 6665);
 	Driver driver(robot);

@@ -241,6 +241,76 @@ void Map::inflationCell(Grid &newMap, int row, int column, int radius)
 	}
 }
 
+void Map::addPathToFile(char* filePath , Node::Graph graph,int Width,int Hight) {
+	cout<<"file path " <<filePath<<endl;
+	cout<<"Width " << Width << endl;
+	cout<<"Height " << Hight <<endl;
+	cout<<"Graph length " << graph.size()<<endl;
+	for(int z = Hight-1;z>-1;z--){
+		for(int l= Width-1;l>-1;l--){
+			if (graph.size()>(unsigned)z && graph[0].size()>(unsigned)l && graph[z][l] != NULL) {
+				for (int k=0;k<4;k++) {
+					if ( (graph[z][l]->neighborsInTree.size() > (unsigned)k) && (graph[z][l]->neighborsInTree[k] != NULL)) {
+						int i = graph[z][l]->getPosition().first;
+						int j = graph[z][l]->getPosition().second;
+						//convert the row to the original map row that was read from the image
+						i = ((i+0.5) * robotSizeInCells * 2);
+						//convert the row to the original map column that was read from the image
+						j = ((j+0.5) * robotSizeInCells * 2);
+						int i1 = graph[z][l]->neighborsInTree[k]->getPosition().first;
+						int j1 = graph[z][l]->neighborsInTree[k]->getPosition().second;
+						////convert the row to the original map row that was read from the image
+						i1 = ((i1+0.5) * robotSizeInCells * 2);
+						////convert the row to the original map column that was read from the image
+						j1 = ((j1+0.5) * robotSizeInCells * 2);
+						//check how we need to move on row or column
+						if(j<j1 && i == i1){
+							for (int m = j; m < j1; m++) {
+								int c = (i * mapWidth + m) * 4;
+								image[c] = 255;
+								image[c + 1] = 0;
+								image[c + 2] = 0;
+							}
+							//check how we need to move on row or column
+						}else if(j>j1 && i == i1){
+							for (int m =j1 ; m < j; m++) {
+								int c = (i * mapWidth + m) * 4;
+								image[c] = 255;
+								image[c + 1] = 0;
+								image[c + 2] = 0;
+							}
+							//check how we need to move on row or column
+						}else if(j == j1 && i > i1){
+							for (int m =i1 ; m < i; m++) {
+								int c = (m * mapWidth + j) * 4;
+								image[c] = 255;
+								image[c + 1] = 0;
+								image[c + 2] = 0;
+							}
+							//check how we need to move on row or column
+						}else if(j == j1 && i < i1){
+							for (int m =i ; m < i1; m++) {
+								int c = (m * mapWidth + j) * 4;
+								image[c] = 255;
+								image[c + 1] = 0;
+								image[c + 2] = 0;
+							}
+						}
+						cout << "(" << graph[z][l]->getPosition().first << "," << graph[z][l]->getPosition().second << ")";
+						cout << " -> ";
+						cout << "(" << graph[z][l]->neighborsInTree[k]->getPosition().first << "," << graph[z][l]->neighborsInTree[k]->getPosition().second << ")" << endl;
+					}
+				}
+			}
+		}
+	}
+	unsigned error = lodepng::encode(filePath, image, mapWidth, mapHeight);
+	if (!error){
+		std::cout << "encoder error " << error << ": "
+				<< lodepng_error_text(error) << std::endl;
+	}
+}
+
 Map::~Map() {
 	map.clear();
 	fineGrid.clear();

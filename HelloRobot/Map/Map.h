@@ -9,6 +9,8 @@
 #define MAP_H_
 
 #include <vector>
+#include "Node.h";
+
 using namespace std;
 
 typedef vector<vector<bool> > Grid;
@@ -45,7 +47,9 @@ public:
 	void loadMapFromFile(const char* filePath);
 	void inflateObstacles();
 	Grid& getCoarseGrid(){return coarseGrid;};
+	Grid& getFineGrid(){return fineGrid;};
 	Point convertPointToFinePoint(int row, int col);
+	void addPathToFile(char* filePath, Node::Graph graph,int Width,int Hight);
 	virtual ~Map();
 };
 

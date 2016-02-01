@@ -19,16 +19,16 @@ vector<Node*> Node::getAllPossibleMves(const Graph& map)
 {
 	if(neighborsInTree.size() > 0)
 		return neighborsInTree;
-	//cout<<"("<<row<<","<<col<<")"<<" neighbors: ";
+	cout<<"("<<row<<","<<col<<")"<<" neighbors: ";
 
-	//left
-	if(col-1 > -1)
+	//right
+	if(col+1 < (int)map[0].size())
 	{
-		if(!(map.at(row).at(col-1)->isWall) && !(map.at(row).at(col-1)->visited))
+		if(!(map.at(row).at(col+1)->isWall) && !map.at(row).at(col+1)->visited)
 		{
-			neighborsInTree.push_back(map.at(row).at(col-1));
-			map.at(row).at(col-1)->setCameFrom(this);
-			//cout<<","<<"("<<row<<","<<(col-1)<<")";
+			neighborsInTree.push_back(map.at(row).at(col+1));
+			map.at(row).at(col+1)->setCameFrom(this);
+			cout<<","<<"("<<row<<","<<(col+1)<<")";
 		}
 	}
 
@@ -39,7 +39,18 @@ vector<Node*> Node::getAllPossibleMves(const Graph& map)
 		{
 			neighborsInTree.push_back(map.at(row-1).at(col));
 			map.at(row-1).at(col)->setCameFrom(this);
-			//cout<<","<<"("<<row-1<<","<<col<<")";
+			cout<<","<<"("<<row-1<<","<<col<<")";
+		}
+	}
+
+	//left
+	if(col-1 > -1)
+	{
+		if(!(map.at(row).at(col-1)->isWall) && !(map.at(row).at(col-1)->visited))
+		{
+			neighborsInTree.push_back(map.at(row).at(col-1));
+			map.at(row).at(col-1)->setCameFrom(this);
+			cout<<","<<"("<<row<<","<<(col-1)<<")";
 		}
 	}
 
@@ -50,22 +61,13 @@ vector<Node*> Node::getAllPossibleMves(const Graph& map)
 		{
 			neighborsInTree.push_back(map.at(row+1).at(col));
 			map.at(row+1).at(col)->setCameFrom(this);
-			//cout<<","<<"("<<row+1<<","<<col<<")";
+			cout<<","<<"("<<row+1<<","<<col<<")";
 		}
 	}
 
-	//right
-	if(col+1 < (int)map[0].size())
-	{
-		if(!(map.at(row).at(col+1)->isWall) && !map.at(row).at(col+1)->visited)
-		{
-			neighborsInTree.push_back(map.at(row).at(col+1));
-			map.at(row).at(col+1)->setCameFrom(this);
-			//cout<<","<<"("<<row<<","<<(col+1)<<")";
-		}
-	}
 
-	//cout<<endl;
+
+	cout<<endl;
 	return neighborsInTree;
 }
 
