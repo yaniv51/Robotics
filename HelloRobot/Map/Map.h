@@ -14,8 +14,10 @@
 using namespace std;
 
 typedef vector<vector<bool> > Grid;
-
+typedef pair<int, int> Position;
+typedef vector<Position> Path;
 typedef pair<int, int> Point;
+
 
 class Map {
 private:
@@ -40,6 +42,8 @@ private:
 	bool isFindAreaOccupied(int row, int column, int radius, const Grid& grid);
 	void initializeGrid(int rows, int columns, Grid& grid);
 	Grid copyGrid(const Grid &grid);
+	//test
+	void addWayPoint(int x, int y);
 
 public:
 	Map(float mapResolution, float robotSize);
@@ -48,7 +52,12 @@ public:
 	Grid& getCoarseGrid(){return coarseGrid;};
 	Grid& getFineGrid(){return fineGrid;};
 	Point convertPointToFinePoint(int row, int col);
-	void addPathToFile(char* filePath, Node::Graph graph,int Width,int Hight);
+	Point convertPointToCoarsePoint(int row, int col);
+	void addPathToFile(const char* filePath, Node::Graph graph,int Width,int Hight);
+	//test
+	void addFinePathToFile(const char* filePath, Node::Graph graph,int Width,int Hight);
+	void addFullPathToFile(const char* filePath, Path path,int Width,int Hight);
+	void drawline(int x1, int y1, int x2, int y2);
 	virtual ~Map();
 };
 

@@ -24,27 +24,34 @@ private:
 	Node::Graph coarseGraph;
 	Node::Graph fineGraph;
 	Path path;
+	vector<Node> nodePath;
+	Path finePath;
 
 	void DFS(Node *node, const Node::Graph& myGraph);
 	void DFSwithClock(Node *node, const Node::Graph& myGraph);
 	void DFSagainstClock(Node *node, const Node::Graph& myGraph);
 	void printGraph(const Node::Graph& myGraph);
-	void printDFS();
 	void buildGraphByGrid(const Grid& grid, Node::Graph& graph);
 	void printFullPath();
+	void printFullFinePath();
 	void buildSTCPath(Node* currentPos);
+	void buildFinePath();
+	int getNextDirection(Position currentPos, Position nextPosition);
 
 public:
 	STC(Map &map, Position initialRobotPos);
 	void buildGraph();
 	void buildSpanningTree();
-	void drawSpanningTree();
 	void buildFineGraph(const Grid& fineGrid);
 	Path getPath() {return path;}
 	Position getInitialRobotPosition() {return initialRobotPos;}
 	Node::Graph& getCoarseGraph(){return coarseGraph;}
+	Node::Graph& getFineGtaph() {return fineGraph;}
+	vector<Node>& getNodePath() {return nodePath;}
 	int getGraphRows(){return coarseGraph.size();}
 	int getGraphColumns(){return coarseGraph[0].size();}
+	int getFineGraphRows(){return fineGraph.size();}
+	int getFineGraphColumns(){return fineGraph[0].size();}
 	virtual ~STC();
 };
 

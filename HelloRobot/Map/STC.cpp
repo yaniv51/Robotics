@@ -28,10 +28,11 @@ void STC::buildGraph()
 		DFS(coarseGraph[i][j], coarseGraph);
 	}
 	//printGraph(coarseGraph);
-	buildFineGraph(fineGrid);
-	path.clear();
+	//path.clear();
 	buildSTCPath(coarseGraph[i][j]);
+	buildFineGraph(fineGrid);
 	printFullPath();
+	printFullFinePath();
 }
 
 void STC::printFullPath()
@@ -67,9 +68,19 @@ void STC::printFullPath()
 	cout<<endl;*/
 }
 
+void STC::printFullFinePath()
+{
+	cout<<"STC path:"<<endl;
+	for(unsigned int i=0; i<finePath.size(); i++)
+	{
+		cout<<"["<<finePath[i].first<<","<<finePath[i].second<<"] ->";
+	}
+	cout<<endl;
+}
+
 void STC::DFS(Node *node, const Node::Graph& myGraph) {
 	int row;
-	//path.push_back(node->getPosition());
+	path.push_back(node->getPosition());
 	row = node->row;
 	//col = node->col;
 
@@ -112,6 +123,7 @@ void STC::DFSwithClock(Node *node, const Node::Graph& myGraph)
 			node->addNeighbor(myGraph.at(row).at(col+1));
 			myGraph.at(row).at(col+1)->setCameFrom(node);
 			DFS(myGraph.at(row).at(col+1), myGraph);
+			path.push_back(node->getPosition());
 		}
 	}
 
@@ -123,6 +135,7 @@ void STC::DFSwithClock(Node *node, const Node::Graph& myGraph)
 			node->addNeighbor(myGraph.at(row-1).at(col));
 			myGraph.at(row-1).at(col)->setCameFrom(node);
 			DFS(myGraph.at(row-1).at(col), myGraph);
+			path.push_back(node->getPosition());
 		}
 	}
 
@@ -134,6 +147,7 @@ void STC::DFSwithClock(Node *node, const Node::Graph& myGraph)
 			node->addNeighbor(myGraph.at(row).at(col-1));
 			myGraph.at(row).at(col-1)->setCameFrom(node);
 			DFS(myGraph.at(row).at(col-1), myGraph);
+			path.push_back(node->getPosition());
 		}
 	}
 
@@ -145,6 +159,7 @@ void STC::DFSwithClock(Node *node, const Node::Graph& myGraph)
 			node->addNeighbor(myGraph.at(row+1).at(col));
 			myGraph.at(row+1).at(col)->setCameFrom(node);
 			DFS(myGraph.at(row+1).at(col), myGraph);
+			path.push_back(node->getPosition());
 		}
 	}
 }
@@ -170,6 +185,7 @@ void STC::DFSagainstClock(Node *node, const Node::Graph& myGraph)
 			node->addNeighbor(myGraph.at(row).at(col-1));
 			myGraph.at(row).at(col-1)->setCameFrom(node);
 			DFS(myGraph.at(row).at(col-1), myGraph);
+			path.push_back(node->getPosition());
 		}
 	}
 
@@ -181,6 +197,7 @@ void STC::DFSagainstClock(Node *node, const Node::Graph& myGraph)
 			node->addNeighbor(myGraph.at(row+1).at(col));
 			myGraph.at(row+1).at(col)->setCameFrom(node);
 			DFS(myGraph.at(row+1).at(col), myGraph);
+			path.push_back(node->getPosition());
 		}
 	}
 
@@ -192,6 +209,7 @@ void STC::DFSagainstClock(Node *node, const Node::Graph& myGraph)
 			node->addNeighbor(myGraph.at(row-1).at(col));
 			myGraph.at(row-1).at(col)->setCameFrom(node);
 			DFS(myGraph.at(row-1).at(col), myGraph);
+			path.push_back(node->getPosition());
 		}
 	}
 
@@ -203,6 +221,7 @@ void STC::DFSagainstClock(Node *node, const Node::Graph& myGraph)
 			node->addNeighbor(myGraph.at(row).at(col+1));
 			myGraph.at(row).at(col+1)->setCameFrom(node);
 			DFS(myGraph.at(row).at(col+1), myGraph);
+			path.push_back(node->getPosition());
 		}
 	}
 }
@@ -211,15 +230,164 @@ void STC::buildFineGraph(const Grid& fineGrid)
 {
 	//build new fine graph
 	buildGraphByGrid(fineGrid, fineGraph);
-	for(unsigned int i = 0; i<coarseGraph.size(); i++)
+
+	buildFinePath();
+
+	for(unsigned int i = 0; i< finePath.size()-1; i++)
 	{
-		for(unsigned j = 0; j<coarseGraph[0].size(); j++)
-		{
-			fineGraph.at(i*2).at(j*2)->visited = coarseGraph.at(i).at(j)->visited;
-		}
+		//fineGraph.at(finePath[i].first).at(finePath[i].second].
+		fineGraph.at(finePath[i].first).at(finePath[i].second)->addNeighbor(fineGraph.at(finePath[i+1].first).at(finePath[i+1].second));
 	}
 
 	//printGraph(fineGraph);
+}
+
+void STC::buildFinePath()
+{
+	int lastDirection, direction;
+	unsigned int i;
+
+	//build fine path
+	// 1= up, 2= down, 3= left, 4= right
+	lastDirection = 0;
+
+	for(i = 0; i< path.size()-1; i++)
+	{
+		direction = getNextDirection(path[i], path[i+1]);
+		switch(direction)
+		{
+		case 1: // up
+			if(lastDirection == 4) //up from right
+			{
+				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2)); //add down left
+				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2+1)); //add down right
+				finePath.push_back(Position(path[i].first*2, path[i].second*2+1)); //add upper right
+			}
+			else if(lastDirection == 2) // from down to up -> U TURN
+			{
+				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2+1)); //add down left
+				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2)); //add up left
+				finePath.push_back(Position(path[i].first*2, path[i].second*2)); //add up right
+				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2)); //add down right
+			}
+			else if(lastDirection == 3) //from left to up
+			{
+				finePath.push_back(Position(path[i].first*2, path[i].second*2 +1));
+			}
+			else //continue moving up
+			{
+				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2 +1));
+				finePath.push_back(Position(path[i].first*2 , path[i].second*2 +1));
+			}
+			lastDirection = 1;
+			break;
+		case 2: // down
+
+			if(lastDirection == 3) //from left to down
+			{
+				finePath.push_back(Position(path[i].first*2, path[i].second*2+1)); //add upper left
+				finePath.push_back(Position(path[i].first*2, path[i].second*2)); //add upper right
+				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2)); //add down left
+			}
+			else if(lastDirection == 1) //from up to down -> U TURN
+			{
+				finePath.push_back(Position(path[i].first*2, path[i].second*2)); //add up left
+				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2)); //add down left
+				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2+1)); // add down right
+				finePath.push_back(Position(path[i].first*2, path[i].second*2+1)); //add up right
+			}
+			else if(lastDirection == 4) //from right to down
+			{
+				finePath.push_back(Position(path[i].first*2, path[i].second*2)); //add upper left
+				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2)); //add down left
+			}
+			else // continue moving down
+			{
+				finePath.push_back(Position(path[i].first*2, path[i].second*2)); //add up left
+				finePath.push_back(Position(path[i].first*2+1, path[i].second*2)); // add down left
+			}
+			lastDirection = 2;
+			break;
+		case 3: // left
+
+			if(lastDirection == 1) // from up to left
+			{
+				finePath.push_back(Position(path[i].first*2, path[i].second*2+1));
+				finePath.push_back(Position(path[i].first*2, path[i].second*2));
+			}
+			else if(lastDirection == 4) // from right to left -> U TURN
+			{
+				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2));
+				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2+1));
+				finePath.push_back(Position(path[i].first*2, path[i].second*2 +1));
+				finePath.push_back(Position(path[i].first*2, path[i].second*2));
+			}
+			else if(lastDirection == 2) //from down to left
+			{
+				finePath.push_back(Position(path[i].first*2, path[i].second*2));
+			}
+			else //continue go left
+			{
+				finePath.push_back(Position(path[i].first*2, path[i].second*2+1)); //add up left
+				finePath.push_back(Position(path[i].first*2, path[i].second*2)); // add up right
+			}
+			lastDirection = 3;
+			break;
+		case 4: //right
+			if(lastDirection == 2) // from down to right
+			{
+				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2)); //add down left
+				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2+1)); //add down right
+			}
+			else if(lastDirection == 3) // from left to right -> U TURN
+			{
+				finePath.push_back(Position(path[i].first*2, path[i].second*2 +1));
+				finePath.push_back(Position(path[i].first*2, path[i].second*2));
+				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2));
+				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2 +1));
+			}
+			else if(lastDirection == 1) //from up to right
+			{
+				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2 +1));
+			}
+			else //continue moving right
+			{
+				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2));
+				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2+1));
+			}
+			lastDirection = 4;
+			break;
+		}
+
+	}
+}
+
+int STC::getNextDirection(Position currentPos, Position nextPosition)
+{
+	if(currentPos.first > nextPosition.first)
+	{
+		//going up
+		return 1;
+	}
+	else if(currentPos.first < nextPosition.first)
+	{
+		//going down
+		return 2;
+	}
+	else
+	{
+		if(currentPos.second > nextPosition.second)
+		{
+			//going left
+			return 3;
+		}
+		else if(currentPos.second <= nextPosition.second)
+		{
+			//going right
+			return 4;
+		}
+	}
+	return 0;
 }
 
 //generic creation of graph by grid
@@ -255,15 +423,18 @@ void STC::printGraph(const Node::Graph& myGraph)
 
 void STC::buildSTCPath(Node* currentPos)
 {
-
 	for(vector<Node*>::iterator itBegin = currentPos->neighborsInTree.begin();
 			itBegin != currentPos->neighborsInTree.end(); itBegin++)
 	{
-		//cout<<"["<<currentPos->row<<","<<currentPos->col<<"]->";
-		path.push_back(currentPos->getPosition());
+		//path.push_back(currentPos->getPosition());
+		//finePath.push_back(currentPos->getForwardPosition());
+		nodePath.push_back(*currentPos);
 		buildSTCPath((*itBegin));
+		//finePath.push_back(currentPos->getBackwardPosision());
 	}
-	path.push_back(currentPos->getPosition());
+	//path.push_back(currentPos->getPosition());
+	//finePath.push_back(currentPos->getBackwardPosision());
+	nodePath.push_back(*currentPos);
 }
 
 STC::~STC() {

@@ -7,8 +7,8 @@
 
 #ifndef ROBOTMANAGER_H_
 #define ROBOTMANAGER_H_
-#include "RobotComponent/Robot.h"
-#include "Plans/ObstacleAvoidance.h"
+#include "../RobotComponent/Robot.h"
+#include "../Plans/ObstacleAvoidance.h"
 
 class RobotManager {
 private:

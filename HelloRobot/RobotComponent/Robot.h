@@ -28,7 +28,7 @@ private:
 
 public:
 	//Robot(PlayerClient* player, Position2dProxy* posProxy, Laser* laserProxy);
-	Robot(const char* hostName, const int port);
+	Robot(const char* hostName, const int port, int startPosX, int startPosY);
 	double GetLaserProxyDistance(int index);
 	double GetX();
 	double GetY();

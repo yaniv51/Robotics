@@ -7,7 +7,7 @@
 
 #include "Robot.h"
 
-Robot::Robot(const char* hostName, const int port)
+Robot::Robot(const char* hostName, const int port, int startPosX, int startPosY)
 {
 	pc = new PlayerClient(hostName, port);
 	pp = new Position2dProxy(pc,0);
@@ -16,7 +16,10 @@ Robot::Robot(const char* hostName, const int port)
 	laserHelper = new Laser(lp);
 
 	pp->SetMotorEnable(true); //for real robot - must use this command for start moving
-	pp->SetOdometry(0,0,0);
+	//pose [2.175 -2.875 45]
+	//pp->SetOdometry(2.175,-2.875,90);
+
+	pp->SetOdometry((double)startPosX,(double)startPosY,90);
 	//for remove old values
 		for(int i = 0; i < 15; i++)
 			pc->Read();
