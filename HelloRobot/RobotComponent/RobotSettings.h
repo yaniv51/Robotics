@@ -33,5 +33,10 @@
 #define MAP_RESOLUTION 0.025
 #define ROBOT_SIZE 0.3
 
+#define MOVING_UP 		1
+#define MOVING_DOWN 	2
+#define MOVING_LEFT 	3
+#define MOVING_RIGHT 	4
+
 
 #endif /* ROBOTSETTINGS_H_ */

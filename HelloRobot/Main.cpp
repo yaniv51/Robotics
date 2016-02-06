@@ -27,6 +27,7 @@ int main(int argc, char** argv)
 	STC stc(map, CoarsePos);
 	stc.buildGraph();
 	map.addPathToFile("MapWithPath.png", stc.getCoarseGraph(), stc.getGraphColumns(), stc.getGraphRows());
+	//map.addPathToFile("MapWithPath.png", stc.getFineGtaph(), stc.getFineGraphColumns(), stc.getFineGraphRows(), false);
 	//map.addFullPathToFile("MapWithPath.png", stc.getPath(), stc.getGraphColumns(), stc.getGraphRows());
 	map.addFinePathToFile("MapWithPath.png", stc.getFineGtaph(), stc.getFineGraphColumns(), stc.getFineGraphRows());
 	WaypointManager wpm(stc.getNodePath(), 10.0, MAP_RESOLUTION);

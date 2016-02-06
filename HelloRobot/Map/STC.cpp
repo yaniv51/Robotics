@@ -24,56 +24,24 @@ void STC::buildGraph()
 
 	if(coarseGraph.at(i).at(j))
 	{
+		//initialize first node
 		coarseGraph[i][j]->setCameFrom(coarseGraph[i][j]);
+		//run DFS for start location node
 		DFS(coarseGraph[i][j], coarseGraph);
 	}
-	//printGraph(coarseGraph);
-	//path.clear();
-	buildSTCPath(coarseGraph[i][j]);
+
+	// buildSTCNodePath(coarseGraph[i][j]);
 	buildFineGraph(fineGrid);
-	printFullPath();
-	printFullFinePath();
+	printFullPath(path);
+	printFullPath(finePath);
 }
 
-void STC::printFullPath()
-{
-	Position lastPos;
-	Position oldPos;
-	oldPos=path[0];
-	lastPos=path[1];
-
-	cout<<"STC path:"<<endl;
-	for(unsigned int i=0; i<path.size(); i++)
-	{
-		if(i!=0)
-		{
-			//check if change direction
-			//if(isDifferentDirection(oldPos, lastPos, path[i]))
-				//cout<<endl;
-		}
-		cout<<"["<<path[i].first<<","<<path[i].second<<"] ->";
-		if(i!=0)
-		{
-			oldPos = lastPos;
-			lastPos = path[i];
-		}
-	}
-	cout<<endl;
-
-	/*cout<<"STC path:"<<endl;
-	for(unsigned int i=0; i<path.size(); i++)
-	{
-		cout<<"["<<path[i].first*2<<","<<path[i].second*2<<"] ->";
-	}
-	cout<<endl;*/
-}
-
-void STC::printFullFinePath()
+void STC::printFullPath(const Path& newPath)
 {
 	cout<<"STC path:"<<endl;
-	for(unsigned int i=0; i<finePath.size(); i++)
+	for(unsigned int i=0; i<newPath.size(); i++)
 	{
-		cout<<"["<<finePath[i].first<<","<<finePath[i].second<<"] ->";
+		cout<<"["<<newPath[i].first<<","<<newPath[i].second<<"] ->";
 	}
 	cout<<endl;
 }
@@ -98,8 +66,6 @@ void STC::DFS(Node *node, const Node::Graph& myGraph) {
 	{
 		DFSwithClock(node, myGraph);
 	}
-
-	//path.push_back(node->getPosition());
 }
 
 void STC::DFSwithClock(Node *node, const Node::Graph& myGraph)
@@ -233,9 +199,9 @@ void STC::buildFineGraph(const Grid& fineGrid)
 
 	buildFinePath();
 
+	//add neighbors for graph
 	for(unsigned int i = 0; i< finePath.size()-1; i++)
 	{
-		//fineGraph.at(finePath[i].first).at(finePath[i].second].
 		fineGraph.at(finePath[i].first).at(finePath[i].second)->addNeighbor(fineGraph.at(finePath[i+1].first).at(finePath[i+1].second));
 	}
 
@@ -256,21 +222,21 @@ void STC::buildFinePath()
 		direction = getNextDirection(path[i], path[i+1]);
 		switch(direction)
 		{
-		case 1: // up
-			if(lastDirection == 4) //up from right
+		case MOVING_UP: // up
+			if(lastDirection == MOVING_RIGHT) //up from right
 			{
 				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2)); //add down left
 				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2+1)); //add down right
 				finePath.push_back(Position(path[i].first*2, path[i].second*2+1)); //add upper right
 			}
-			else if(lastDirection == 2) // from down to up -> U TURN
+			else if(lastDirection == MOVING_DOWN) // from down to up -> U TURN
 			{
-				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2+1)); //add down left
-				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2)); //add up left
-				finePath.push_back(Position(path[i].first*2, path[i].second*2)); //add up right
-				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2)); //add down right
+				finePath.push_back(Position(path[i].first*2, path[i].second*2)); //add up left
+				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2)); //add down left
+				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2 +1)); //add down right
+				finePath.push_back(Position(path[i].first*2, path[i].second*2 +1)); //add up right
 			}
-			else if(lastDirection == 3) //from left to up
+			else if(lastDirection == MOVING_LEFT) //from left to up
 			{
 				finePath.push_back(Position(path[i].first*2, path[i].second*2 +1));
 			}
@@ -279,50 +245,50 @@ void STC::buildFinePath()
 				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2 +1));
 				finePath.push_back(Position(path[i].first*2 , path[i].second*2 +1));
 			}
-			lastDirection = 1;
+			lastDirection = direction;
 			break;
-		case 2: // down
+		case MOVING_DOWN: // down
 
-			if(lastDirection == 3) //from left to down
+			if(lastDirection == MOVING_LEFT) //from left to down
 			{
 				finePath.push_back(Position(path[i].first*2, path[i].second*2+1)); //add upper left
 				finePath.push_back(Position(path[i].first*2, path[i].second*2)); //add upper right
 				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2)); //add down left
 			}
-			else if(lastDirection == 1) //from up to down -> U TURN
+			else if(lastDirection == MOVING_UP) //from up to down -> U TURN
 			{
-				finePath.push_back(Position(path[i].first*2, path[i].second*2)); //add up left
-				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2)); //add down left
 				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2+1)); // add down right
 				finePath.push_back(Position(path[i].first*2, path[i].second*2+1)); //add up right
-			}
-			else if(lastDirection == 4) //from right to down
-			{
-				finePath.push_back(Position(path[i].first*2, path[i].second*2)); //add upper left
+				finePath.push_back(Position(path[i].first*2, path[i].second*2)); //add up left
 				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2)); //add down left
+
+			}
+			else if(lastDirection == MOVING_RIGHT) //from right to down
+			{
+				finePath.push_back(Position(path[i].first*2+1, path[i].second*2)); //add down left
 			}
 			else // continue moving down
 			{
 				finePath.push_back(Position(path[i].first*2, path[i].second*2)); //add up left
 				finePath.push_back(Position(path[i].first*2+1, path[i].second*2)); // add down left
 			}
-			lastDirection = 2;
+			lastDirection = direction;
 			break;
-		case 3: // left
+		case MOVING_LEFT: // left
 
-			if(lastDirection == 1) // from up to left
+			if(lastDirection == MOVING_UP) // from up to left
 			{
 				finePath.push_back(Position(path[i].first*2, path[i].second*2+1));
 				finePath.push_back(Position(path[i].first*2, path[i].second*2));
 			}
-			else if(lastDirection == 4) // from right to left -> U TURN
+			else if(lastDirection == MOVING_RIGHT) // from right to left -> U TURN
 			{
 				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2));
 				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2+1));
 				finePath.push_back(Position(path[i].first*2, path[i].second*2 +1));
 				finePath.push_back(Position(path[i].first*2, path[i].second*2));
 			}
-			else if(lastDirection == 2) //from down to left
+			else if(lastDirection == MOVING_DOWN) //from down to left
 			{
 				finePath.push_back(Position(path[i].first*2, path[i].second*2));
 			}
@@ -331,22 +297,22 @@ void STC::buildFinePath()
 				finePath.push_back(Position(path[i].first*2, path[i].second*2+1)); //add up left
 				finePath.push_back(Position(path[i].first*2, path[i].second*2)); // add up right
 			}
-			lastDirection = 3;
+			lastDirection = direction;
 			break;
-		case 4: //right
-			if(lastDirection == 2) // from down to right
+		case MOVING_RIGHT: //right
+			if(lastDirection == MOVING_DOWN) // from down to right
 			{
 				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2)); //add down left
 				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2+1)); //add down right
 			}
-			else if(lastDirection == 3) // from left to right -> U TURN
+			else if(lastDirection == MOVING_LEFT) // from left to right -> U TURN
 			{
 				finePath.push_back(Position(path[i].first*2, path[i].second*2 +1));
 				finePath.push_back(Position(path[i].first*2, path[i].second*2));
 				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2));
 				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2 +1));
 			}
-			else if(lastDirection == 1) //from up to right
+			else if(lastDirection == MOVING_UP) //from up to right
 			{
 				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2 +1));
 			}
@@ -355,36 +321,36 @@ void STC::buildFinePath()
 				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2));
 				finePath.push_back(Position(path[i].first*2 +1, path[i].second*2+1));
 			}
-			lastDirection = 4;
+			lastDirection = direction;
 			break;
 		}
 
 	}
 }
 
-int STC::getNextDirection(Position currentPos, Position nextPosition)
+int STC::getNextDirection(const Position currentPos, const Position nextPosition)
 {
 	if(currentPos.first > nextPosition.first)
 	{
 		//going up
-		return 1;
+		return MOVING_UP;
 	}
 	else if(currentPos.first < nextPosition.first)
 	{
 		//going down
-		return 2;
+		return MOVING_DOWN;
 	}
 	else
 	{
 		if(currentPos.second > nextPosition.second)
 		{
 			//going left
-			return 3;
+			return MOVING_LEFT;
 		}
 		else if(currentPos.second <= nextPosition.second)
 		{
 			//going right
-			return 4;
+			return MOVING_RIGHT;
 		}
 	}
 	return 0;
@@ -421,19 +387,16 @@ void STC::printGraph(const Node::Graph& myGraph)
 	}
 }
 
-void STC::buildSTCPath(Node* currentPos)
+void STC::buildSTCNodePath(Node* currentPos)
 {
 	for(vector<Node*>::iterator itBegin = currentPos->neighborsInTree.begin();
 			itBegin != currentPos->neighborsInTree.end(); itBegin++)
 	{
 		//path.push_back(currentPos->getPosition());
-		//finePath.push_back(currentPos->getForwardPosition());
 		nodePath.push_back(*currentPos);
-		buildSTCPath((*itBegin));
-		//finePath.push_back(currentPos->getBackwardPosision());
+		buildSTCNodePath((*itBegin));
 	}
 	//path.push_back(currentPos->getPosition());
-	//finePath.push_back(currentPos->getBackwardPosision());
 	nodePath.push_back(*currentPos);
 }
 
@@ -443,4 +406,6 @@ STC::~STC() {
 			delete(coarseGraph[i][j]);
 	coarseGraph.clear();
 	path.clear();
+	finePath.clear();
+	nodePath.clear();
 }

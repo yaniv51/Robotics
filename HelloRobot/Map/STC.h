@@ -11,6 +11,7 @@
 #include <vector>
 #include "Node.h"
 #include "Map.h"
+#include "../RobotComponent/RobotSettings.h"
 
 using namespace std;
 
@@ -32,17 +33,15 @@ private:
 	void DFSagainstClock(Node *node, const Node::Graph& myGraph);
 	void printGraph(const Node::Graph& myGraph);
 	void buildGraphByGrid(const Grid& grid, Node::Graph& graph);
-	void printFullPath();
-	void printFullFinePath();
-	void buildSTCPath(Node* currentPos);
+	void buildFineGraph(const Grid& fineGrid);
+	void printFullPath(const Path& newPath);
+	void buildSTCNodePath(Node* currentPos);
 	void buildFinePath();
-	int getNextDirection(Position currentPos, Position nextPosition);
+	int getNextDirection(const Position currentPos, const Position nextPosition);
 
 public:
 	STC(Map &map, Position initialRobotPos);
 	void buildGraph();
-	void buildSpanningTree();
-	void buildFineGraph(const Grid& fineGrid);
 	Path getPath() {return path;}
 	Position getInitialRobotPosition() {return initialRobotPos;}
 	Node::Graph& getCoarseGraph(){return coarseGraph;}

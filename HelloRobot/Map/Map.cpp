@@ -38,13 +38,15 @@ void Map::loadMapFromFile(const char* filePath) {
 		}
 	}
 
-	//printGrid(map);
+	// inflate map
 	inflateObstacles();
 	//printGrid(map);
+
 	createFineGrid();
-	printGrid(fineGrid);
+	//printGrid(fineGrid);
+
 	createCoarseGrid();
-	printGrid(coarseGrid);
+	//printGrid(coarseGrid);
 }
 
 bool Map::checkIfCellIsOccupied(int i, int j) {
@@ -63,8 +65,6 @@ Point Map::convertPointToFinePoint(int col, int row)
 	int x, y;
 	x = row / robotSizeInCells;
 	y = col / robotSizeInCells;
-	//x/=2;
-	//y/=2;
 	return Point(x, y);
 }
 
