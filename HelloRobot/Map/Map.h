@@ -8,16 +8,11 @@
 #ifndef MAP_H_
 #define MAP_H_
 
-#include <vector>
 #include "Node.h";
+#include "../Helper/Defines.h"
 
 using namespace std;
-
-typedef vector<vector<bool> > Grid;
-typedef pair<int, int> Position;
-typedef vector<Position> Path;
-typedef pair<int, int> Point;
-
+using namespace Defines;
 
 class Map {
 private:

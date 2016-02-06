@@ -8,12 +8,11 @@
 #ifndef NODE_H_
 #define NODE_H_
 
-#include <vector>
+#include "../Helper/Defines.h"
 #include <iostream>
 
 using namespace std;
-
-typedef pair<int, int> Position;
+using namespace Defines;
 
 class Node {
 private:

@@ -38,5 +38,4 @@
 #define MOVING_LEFT 	3
 #define MOVING_RIGHT 	4
 
-
 #endif /* ROBOTSETTINGS_H_ */

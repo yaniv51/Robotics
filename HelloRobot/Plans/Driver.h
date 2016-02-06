@@ -9,20 +9,19 @@
 #define DRIVER_H_
 
 #include "../RobotComponent/Robot.h"
-#include <vector>
+#include "../Helper/Defines.h"
 
-typedef pair<double, double> Position;
-typedef vector<Position> Path;
+using namespace Defines;
 
 class Driver {
 private:
 	const double linearTolerance = 0.01;
 	const double linearSpeed = 0.6;
 
-	Position currPos;
+	xyPosition currPos;
 
 	Robot &robot;
-	void moveForward(Position targetPos);
+	void moveForward(xyPosition targetPos);
 	void turn(double newDirection);
 	void getCurrentPos();
 public:

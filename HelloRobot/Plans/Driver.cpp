@@ -12,7 +12,7 @@ Driver::Driver(Robot &robot) : robot(robot) {
 
 }
 
-void Driver::moveForward(Position targetPos) {
+void Driver::moveForward(xyPosition targetPos) {
 	getCurrentPos();
 
 	robot.SetSpeed(linearSpeed, 0);
@@ -29,7 +29,7 @@ void Driver::moveForward(Position targetPos) {
 }
 
 void Driver::moveRobot(Path path) {
-	Position targetPos(2.475, -2.575);
+	xyPosition targetPos(2.475, -2.575);
 	moveForward(targetPos);
 }
 

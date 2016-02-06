@@ -8,15 +8,13 @@
 #ifndef STC_H_
 #define STC_H_
 
-#include <vector>
 #include "Node.h"
 #include "Map.h"
 #include "../RobotComponent/RobotSettings.h"
+#include "../Helper/Defines.h"
 
 using namespace std;
-
-typedef pair<int, int> Position;
-typedef vector<Position> Path;
+using namespace Defines;
 
 class STC {
 private:

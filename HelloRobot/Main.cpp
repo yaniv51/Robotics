@@ -32,10 +32,10 @@ int main(int argc, char** argv)
 	const char *filePath = "roboticLabMap.png";
 	map.loadMapFromFile(filePath);
 
-	/*STC stc(map, CoarsePos);
+	STC stc(map, CoarsePos);
 	stc.buildGraph();
 	map.addPathToFile("MapWithPath.png", stc.getCoarseGraph(), stc.getGraphColumns(), stc.getGraphRows(), true);
-	map.addPathToFile("MapWithPath.png", stc.getFineGtaph(), stc.getFineGraphColumns(), stc.getFineGraphRows(), false);*/
+	map.addPathToFile("MapWithPath.png", stc.getFineGtaph(), stc.getFineGraphColumns(), stc.getFineGraphRows(), false);
 
 	//WaypointManager wpm(stc.getNodePath(), 10.0, MAP_RESOLUTION);
 	//wpm.build_way_point_vector(stc.getNodePath().size());
