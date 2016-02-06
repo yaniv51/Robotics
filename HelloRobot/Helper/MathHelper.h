@@ -14,6 +14,8 @@ namespace MathHelper
 	double ConvertDegreeToRadian(double degree);
 
 	double ConvertRadianToDegree(double radian);
+
+	double ConvertRobotLocationToMapPixel(double size, double robotMapSize, double startPos);
 }
 
 
