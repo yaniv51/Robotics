@@ -11,7 +11,7 @@
 #include <vector>
 #include <set>
 #include <math.h>
-#include "../Map/WayPoint.h"
+#include "../Waypoint/WayPoint.h"
 #include "../RobotComponent/RobotSettings.h"
 #include "../Map/STC.h"
 

@@ -76,6 +76,7 @@ void ObstacleAvoidance::GetObstacleLocationBaseOnCurrentLocation(double xRob, do
 	y = yRob+distance*sin(robotYaw+sensorAngle);
 
 	cout<<"obstacle at "<<x<<","<<y<<endl;
+	cout<<"robot location: "<<xRob<<","<<yRob<<endl;
 }
 
 ObstacleAvoidance::~ObstacleAvoidance() {

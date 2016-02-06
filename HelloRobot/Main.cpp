@@ -17,9 +17,9 @@ int main(int argc, char** argv)
 	Position CoarsePos = map.convertPointToCoarsePoint(START_LOCATION_COLUMN, START_LOCATION_ROW);
 	cout<<"start point: "<<"["<<CoarsePos.first<<","<<CoarsePos.second<<"]"<<endl;
 
-	//Robot myRobot("localhost", 6665, (double)FinePos.first, (double)FinePos.second);
-	//ObstacleAvoidance obstacleAvoidence(&myRobot, myRobot.GetLaserHelper());
-	//RobotManager manager(&myRobot, &obstacleAvoidence);
+	Robot myRobot("localhost", 6665, (double)FinePos.first, (double)FinePos.second);
+	ObstacleAvoidance obstacleAvoidence(&myRobot, myRobot.GetLaserHelper());
+	RobotManager manager(&myRobot, &obstacleAvoidence);
 
 	const char *filePath = "roboticLabMap.png";
 	map.loadMapFromFile(filePath);
@@ -29,11 +29,11 @@ int main(int argc, char** argv)
 	map.addPathToFile("MapWithPath.png", stc.getCoarseGraph(), stc.getGraphColumns(), stc.getGraphRows(), true);
 	map.addPathToFile("MapWithPath.png", stc.getFineGtaph(), stc.getFineGraphColumns(), stc.getFineGraphRows(), false);
 
-	WaypointManager wpm(stc.getNodePath(), 10.0, MAP_RESOLUTION);
+	//WaypointManager wpm(stc.getNodePath(), 10.0, MAP_RESOLUTION);
 	//wpm.build_way_point_vector(stc.getNodePath().size());
 
 
-	//manager.Run();
+	manager.Run();
 	/*
 	Robot robot("localhost", 6665);
 	Driver driver(robot);

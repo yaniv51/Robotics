@@ -10,6 +10,7 @@
 
 #include <libplayerc++/playerc++.h>
 #include "RobotSettings.h"
+#include "../Helper/MathHelper.h"
 #include "Laser.h"
 #include <math.h>
 #include <unistd.h>

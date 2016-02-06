@@ -13,7 +13,7 @@
 
 
 #define SAMPLES 666
-#define LINEAR_SPEED 0.2
+#define LINEAR_SPEED 0.12
 #define LEFT_ANGULAR_SPEED 0.5
 #define RIGHT_ANGULAR_SPEED -0.5
 #define MIN_DEST_FROM_OBSTACLE 0.6 //check 0.5
