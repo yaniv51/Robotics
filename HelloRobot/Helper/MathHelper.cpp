@@ -29,6 +29,18 @@ namespace MathHelper
 		return y/robotMapResolution;
 	}
 
+	double ConvertMapPixelToY(double robotMapResolution, double robotMapSize, double yPixel)
+	{
+		double result;
+
+		result = yPixel*robotMapResolution;
+
+		if(result > robotMapSize/2)
+			result =result*(-1) + (robotMapSize/2);
+
+		return result;
+	}
+
 	double ConvertXRobotLocationToMapPixel(double robotMapResolution, double robotMapSize, double x)
 	{
 		if(x<0)
@@ -38,5 +50,18 @@ namespace MathHelper
 
 		// get the relation size of current x from total size (x/0.025)
 		return x/robotMapResolution;
+	}
+
+	double ConvertMapPixelToX(double robotMapResolution, double robotMapSize, double xPixel)
+	{
+		double result;
+
+		result = xPixel*robotMapResolution;
+		if(result< robotMapSize/2) //negetive number
+			result*=-1;
+		else
+			result -= (robotMapSize/2);
+
+		return result;
 	}
 }

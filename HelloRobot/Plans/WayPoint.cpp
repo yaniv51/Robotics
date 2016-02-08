@@ -7,10 +7,11 @@
 
 #include "WayPoint.h"
 
-WayPoint::WayPoint(double x, double y, double yaw_angle) {
+WayPoint::WayPoint(double x, double y, double yaw_angle, int nextDirection) {
 	x_Coordinate = x;
 	y_Coordinate = y;
 	yaw = yaw_angle;
+	direction = nextDirection;
 }
 
 WayPoint::WayPoint()

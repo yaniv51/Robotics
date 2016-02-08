@@ -29,6 +29,13 @@ void MapManager::buildGraphByMap(const char* mapPath, xyPosition startPosition)
 	map.addPathToFile("MapWithPath.png", stc->getFineGtaph(), stc->getFineGraphColumns(), stc->getFineGraphRows(), false);
 }
 
+Path MapManager::getFullSTCPath()
+{
+	if(stc!=NULL)
+		return stc->getPath();
+	return Path();
+}
+
 MapManager::~MapManager() {
 	delete stc;
 }

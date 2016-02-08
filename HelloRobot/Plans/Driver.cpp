@@ -7,36 +7,48 @@
 
 #include "Driver.h"
 
-Driver::Driver(Robot &robot) : robot(robot) {
-	// TODO Auto-generated constructor stub
-
+Driver::Driver(Robot *newRobot){
+	robot = newRobot;
 }
 
-void Driver::moveForward(xyPosition targetPos) {
-	getCurrentPos();
+void Driver::moveForward(xyPosition targetPos, double yaw, int direction) {
+	//getCurrentPos();
 
-	robot.SetSpeed(linearSpeed, 0);
+	// change YAW for to next point
+	while (abs(robot->GetYaw() - yaw) > 10 * linearTolerance ){
+		robot->SetSpeed(0, LEFT_ANGULAR_SPEED);
+		getCurrentPos();
+	}
+
+	robot->SetSpeed(linearSpeed, 0);
 	while (abs(currPos.first - targetPos.first) > 10 * linearTolerance ||
 			abs(currPos.second - targetPos.second) > 10 * linearTolerance) {
 		getCurrentPos();
 	}
 
 	// slow down before reaching the target
-	robot.SetSpeed(0.1 * linearSpeed, 0);
+	robot->SetSpeed(0.1 * linearSpeed, 0);
 	while (abs(currPos.first - targetPos.first) > linearTolerance ||
-		abs(currPos.second - targetPos.second) > linearTolerance) {		getCurrentPos();
+		abs(currPos.second - targetPos.second) > linearTolerance)
+	{		getCurrentPos();
 	}
 }
 
-void Driver::moveRobot(Path path) {
-	xyPosition targetPos(2.475, -2.575);
-	moveForward(targetPos);
+void Driver::moveRobot(WayPoint* wayPoint) {
+	double x,y;
+
+	//way point is with row, column pixel -> need to change to x,y
+	x = MathHelper::ConvertMapPixelToX(MAP_RESOLUTION, MAP_ROW_SIZE*MAP_RESOLUTION, wayPoint->x_Coordinate);
+	y = MathHelper::ConvertMapPixelToY(MAP_RESOLUTION, MAP_COLUMN_SIZE*MAP_RESOLUTION, wayPoint->y_Coordinate);
+
+	xyPosition targetPos(x, y);
+	moveForward(targetPos, wayPoint->yaw, wayPoint->direction);
 }
 
 void Driver::getCurrentPos() {
-	robot.Refresh();
-	currPos.first = robot.GetX();
-	currPos.second = robot.GetY();
+	robot->Refresh();
+	currPos.first = robot->GetX();
+	currPos.second = robot->GetY();
 
 	cout << "curr pos: " << currPos.first << "," << currPos.second << endl;
 }

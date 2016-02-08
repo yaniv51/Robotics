@@ -18,6 +18,9 @@ namespace MathHelper
 	double ConvertYRobotLocationToMapPixel(double robotMapResolution, double robotMapSize, double y);
 
 	double ConvertXRobotLocationToMapPixel(double robotMapResolution, double robotMapSize, double x);
+
+	double ConvertMapPixelToY(double robotMapResolution, double robotMapSize, double yPixel);
+	double ConvertMapPixelToX(double robotMapResolution, double robotMapSize, double xPixel);
 }
 
 

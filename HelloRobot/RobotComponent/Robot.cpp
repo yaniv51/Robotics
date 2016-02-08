@@ -58,8 +58,9 @@ void Robot::SetSpeed(double forward, double angular)
 
 void Robot::Refresh()
 {
-	pc -> Read();
-	//cout<<"robot location: "<< pp->GetXPos()<<","<<pp->GetYPos()<<","<<pp->GetYaw()<<endl;
+	if(pc->Peek(1))
+		pc -> Read();
+	cout<<"robot location: "<< pp->GetXPos()<<","<<pp->GetYPos()<<","<<pp->GetYaw()<<endl;
 }
 
 bool Robot::canMoveForward(float distance)

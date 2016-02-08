@@ -16,8 +16,9 @@ public:
 	double x_Coordinate;
 	double y_Coordinate;
 	double yaw;
+	int direction;
 
-	WayPoint(double x, double y, double yaw_angle);
+	WayPoint(double x, double y, double yaw_angle, int nextDirection);
 	WayPoint();
 
 	bool operator<(const WayPoint& wp) const

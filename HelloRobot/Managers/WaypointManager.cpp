@@ -7,37 +7,110 @@
 
 #include "WaypointManager.h"
 
-WaypointManager::WaypointManager(vector<Node> path, double gridResolution, double mapResolution)
+WaypointManager::WaypointManager(Path path, double robotMapResolution, double robotRowMapSize, double robotColumnMapSize)
 {
-	stc_path = path;
-	_gridResolution = gridResolution;
-	_mapResolution = mapResolution;
-	is_verticle = false;
+	_stc_path = path;
+	_mapResolution = robotMapResolution;
+	_robotRowMapSize = robotRowMapSize;
+	_robotColumnMapSize = robotColumnMapSize;
+	currentWayPoint = 0;
+	robotSizeInCells = (float)ROBOT_SIZE / (float)robotMapResolution;
 }
 
 
-// Creating way point every "num_of_cells" item on the path
-void WaypointManager::build_way_point_vector(int num_of_cells)
+void WaypointManager::buildWaypointVector()
 {
-	set<WayPoint>::iterator iter = wayPoints.begin();
-	int counter = 0;
-	// map sign = >  0 = left , 1 =  right , 2 = down, 3 = up
-	int currentLocation = -1;
-	int currentX, currentY, nextX, nextY;
-	double m;
+	int nextDirection, lastDirection;
 
-	for (unsigned int i = 0; i < stc_path.size()-1; i++)
+	for (unsigned int i = 0; i < _stc_path.size()-1; i++)
 	{
-		currentX = stc_path[i].col;
-		currentY = stc_path[i].row;
-		nextX = stc_path[i+1].col;
-		nextY = stc_path[i+1].row;
-
-
+		int size = _stc_path.size();
+		nextDirection = getNextDirection(_stc_path.at(i), _stc_path.at(i+1));
+		addWayPoint(_stc_path.at(i), nextDirection);
 	}
 }
 
-double WaypointManager::calc_yaw(double m, Node node_from, Node node_to)
+Point WaypointManager::convertFinePointToMapPixel(int row, int col)
+{
+	Point newPoint(row*robotSizeInCells, col*robotSizeInCells);
+	return newPoint;
+}
+
+void WaypointManager::addWayPoint(Position nextPos, int direction)
+{
+	double x, y, yaw;
+
+	//convert fine point to map point
+	//x = MathHelper::ConvertXRobotLocationToMapPixel(_mapResolution, _robotRowMapSize, nextPos.first);
+	//y = MathHelper::ConvertYRobotLocationToMapPixel(_mapResolution, _robotColumnMapSize, nextPos.second);
+
+	y = nextPos.first*robotSizeInCells;
+	x = nextPos.second*robotSizeInCells;
+
+
+	switch(direction)
+	{
+	case MOVING_UP:
+		yaw = MathHelper::ConvertDegreeToRadian(90);
+		break;
+	case MOVING_DOWN:
+		yaw = MathHelper::ConvertDegreeToRadian(270);
+		break;
+	case MOVING_RIGHT:
+		yaw = MathHelper::ConvertDegreeToRadian(0);
+		break;
+	case MOVING_LEFT:
+		yaw = MathHelper::ConvertDegreeToRadian(180);
+		break;
+	}
+
+	//cout<<"next way point"<<x<<","<<y<<","<<yaw<<endl;
+	wayPoints.push_back(new WayPoint(x, y, yaw, direction));
+}
+
+int WaypointManager::getNextDirection(Position currentPos, Position nextPosition)
+{
+	if(currentPos.first > nextPosition.first)
+	{
+		//going up
+		return MOVING_UP;
+	}
+	else if(currentPos.first < nextPosition.first)
+	{
+		//going down
+		return MOVING_DOWN;
+	}
+	else
+	{
+		if(currentPos.second > nextPosition.second)
+		{
+			//going left
+			return MOVING_LEFT;
+		}
+		else if(currentPos.second <= nextPosition.second)
+		{
+			//going right
+			return MOVING_RIGHT;
+		}
+	}
+	return 0;
+}
+
+WayPoint* WaypointManager::getNextWayPoint()
+{
+	WayPoint* nextWayPoint = wayPoints.at(currentWayPoint+1);
+	currentWayPoint = currentWayPoint+1;
+	return nextWayPoint;
+}
+
+bool WaypointManager::haveMoreWayPoints()
+{
+	if(currentWayPoint < wayPoints.size())
+		return true;
+	return false;
+}
+
+/*double WaypointManager::calc_yaw(double m, Node node_from, Node node_to)
 {
 	double angle;
 
@@ -115,9 +188,9 @@ void WaypointManager::setNextWayPoint(WayPoint Next)
 	nextWayPoint.x_Coordinate = Next.x_Coordinate;
 	nextWayPoint.y_Coordinate = Next.y_Coordinate;
 	nextWayPoint.yaw = Next.yaw;
-}
+}*/
 
-bool WaypointManager::isInWayPoint(double x,double y)
+/*bool WaypointManager::isInWayPoint(double x,double y)
 {
 	double dx = nextWayPoint.x_Coordinate - x;
 	double dy = nextWayPoint.y_Coordinate - y;
@@ -130,15 +203,17 @@ bool WaypointManager::isInWayPoint(double x,double y)
 	cout << endl;
 
 	// Checking if the robot hit the way point, considering tolerance
-	if (distance*_gridResolution <= TOLERANCE)
+	if (distance*_mapResolution <= TOLERANCE)
 	{
 		return true;
 	}
 	return false;
-}
+}*/
 
 
 WaypointManager::~WaypointManager() {
-	// TODO Auto-generated destructor stub
+	for(unsigned int i = 0; i< wayPoints.size(); i++)
+		delete (wayPoints[i]);
+	wayPoints.clear();
 }
 

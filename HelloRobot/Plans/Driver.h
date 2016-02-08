@@ -10,6 +10,8 @@
 
 #include "../RobotComponent/Robot.h"
 #include "../Helper/Defines.h"
+#include "WayPoint.h"
+#include "../RobotComponent/RobotSettings.h"
 
 using namespace Defines;
 
@@ -20,13 +22,13 @@ private:
 
 	xyPosition currPos;
 
-	Robot &robot;
-	void moveForward(xyPosition targetPos);
+	Robot *robot;
+	void moveForward(xyPosition targetPos, double yaw, int direction);
 	void turn(double newDirection);
 	void getCurrentPos();
 public:
-	Driver(Robot &robot);
-	void moveRobot(Path path);
+	Driver(Robot* newRobot);
+	void moveRobot(WayPoint* wayPoint);
 	virtual ~Driver();
 };
 

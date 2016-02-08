@@ -9,37 +9,46 @@
 #define WAYPOINTMANAGER_H_
 
 #include <vector>
-#include <set>
 #include <math.h>
-#include "../Waypoint/WayPoint.h"
+#include <iostream>
+#include "../Plans/WayPoint.h"
 #include "../RobotComponent/RobotSettings.h"
-#include "../Map/STC.h"
+#include "../Helper/Defines.h"
+#include "../Helper/MathHelper.h"
 
 using namespace std;
+using namespace Defines;
+
 
 #define TOLERANCE 10
 
 class WaypointManager {
-public:
-	set<WayPoint> wayPoints;
-	WayPoint currWayPoint;
-
-	WaypointManager(vector<Node> path, double gridResolution, double mapResolution);
-	void build_way_point_vector(int num_of_cells);
-	void setNextWayPoint(WayPoint Next);
-	bool isInWayPoint(double x,double y);
-	virtual ~WaypointManager();
-
 private:
-	vector<Node> stc_path;
+	Path _stc_path;
+	vector<WayPoint*> wayPoints;
 	bool is_verticle;
-	WayPoint nextWayPoint;
-	double _gridResolution;
+	int currentWayPoint;
 	double _mapResolution;
+	double _robotRowMapSize, _robotColumnMapSize;
+	int robotSizeInCells;
 
-	double calc_yaw(double m, Node node_from, Node node_to);
-	double calc_incline(Node node_from, Node node_to);
+	int getNextDirection(Position currentPos, Position nextPos);
+	void addWayPoint(Position nextPos, int direction);
+	Point convertFinePointToMapPixel(int row, int col);
 
+	//double calc_yaw(double m, Node node_from, Node node_to);
+	//double calc_incline(Node node_from, Node node_to);
+
+
+public:
+	WaypointManager(Path path, double robotMapResolution, double robotRowMapSize, double robotColumnMapSize);
+	void buildWaypointVector();
+	WayPoint* getNextWayPoint();
+	bool haveMoreWayPoints();
+
+	//void setNextWayPoint(WayPoint Next);
+	//bool isInWayPoint(double x,double y);
+	virtual ~WaypointManager();
 };
 
 #endif /* WAYPOINTMANAGER_H_ */

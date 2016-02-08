@@ -16,23 +16,25 @@ int main(int argc, char** argv)
 	const char *filePath = "roboticLabMap.png";
 	xyPosition startPos(ROBOT_START_X, ROBOT_START_Y);
 
-	MapManager mapManager(MAP_RESOLUTION, ROBOT_SIZE);
-
-	/*Robot myRobot("localhost", 6665, (double)FinePos.first, (double)FinePos.second);
-	ObstacleAvoidance obstacleAvoidence(&myRobot, myRobot.GetLaserHelper());
-	RobotManager manager(&myRobot, &obstacleAvoidence);*/
-
-	double x = MathHelper::ConvertXRobotLocationToMapPixel(MAP_RESOLUTION, MAP_ROW_SIZE*MAP_RESOLUTION, ROBOT_START_X);
+	/*double x = MathHelper::ConvertXRobotLocationToMapPixel(MAP_RESOLUTION, MAP_ROW_SIZE*MAP_RESOLUTION, ROBOT_START_X);
 	double y = MathHelper::ConvertYRobotLocationToMapPixel(MAP_RESOLUTION, MAP_COLUMN_SIZE*MAP_RESOLUTION, ROBOT_START_Y);
 	cout<<"start location: "<<x<<","<<y<<endl;
 	cout<<"original: "<<START_LOCATION_COLUMN<<","<<START_LOCATION_ROW<<endl;
+	x = MathHelper::ConvertMapPixelToX(MAP_RESOLUTION, MAP_ROW_SIZE*MAP_RESOLUTION, x);
+	y = MathHelper::ConvertMapPixelToY(MAP_RESOLUTION, MAP_COLUMN_SIZE*MAP_RESOLUTION, y);
+	cout<<"start location: "<<x<<","<<y<<endl;*/
+
+	MapManager mapManager(MAP_RESOLUTION, ROBOT_SIZE);
+	Point FinePos = mapManager.getMap().convertPointToFinePoint(START_LOCATION_COLUMN, START_LOCATION_ROW);
+	Robot myRobot("localhost", 6665, (double)FinePos.first, (double)FinePos.second);
+	ObstacleAvoidance obstacleAvoidence(&myRobot, myRobot.GetLaserHelper());
 
 	mapManager.buildGraphByMap(filePath, startPos);
 
-	//WaypointManager wpm(stc.getNodePath(), 10.0, MAP_RESOLUTION);
-	//wpm.build_way_point_vector(stc.getNodePath().size());
+	WaypointManager wpm(mapManager.getFullSTCPath(), MAP_RESOLUTION, MAP_ROW_SIZE*MAP_RESOLUTION,MAP_COLUMN_SIZE*MAP_RESOLUTION);
+	wpm.buildWaypointVector();
 
-
+	//RobotManager manager(&myRobot, &obstacleAvoidence, wpm);
 	//manager.Run();
 	/*
 	Robot robot("localhost", 6665);

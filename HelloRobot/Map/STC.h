@@ -40,7 +40,7 @@ private:
 public:
 	STC(Map &map, Position initialRobotPos);
 	void buildGraph();
-	Path getPath() {return path;}
+	Path getPath() {return finePath;}
 	Position getInitialRobotPosition() {return initialRobotPos;}
 	Node::Graph& getCoarseGraph(){return coarseGraph;}
 	Node::Graph& getFineGtaph() {return fineGraph;}
