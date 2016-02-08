@@ -32,8 +32,8 @@ void STC::buildGraph()
 
 	// buildSTCNodePath(coarseGraph[i][j]);
 	buildFineGraph(fineGrid);
-	printFullPath(path);
-	printFullPath(finePath);
+	//printFullPath(path);
+	//printFullPath(finePath);
 }
 
 void STC::printFullPath(const Path& newPath)

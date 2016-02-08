@@ -6,6 +6,7 @@
  */
 
 #include "MathHelper.h"
+#include <cmath>
 
 namespace MathHelper
 {
@@ -19,9 +20,23 @@ namespace MathHelper
 		return (radian * 180)/M_PI;
 	}
 
-	double ConvertRobotLocationToMapPixel(double size, double robotMapSize, double startPos)
+	double ConvertYRobotLocationToMapPixel(double robotMapResolution, double robotMapSize, double y)
 	{
-		// convert robot x,y to map pixels: ((380.0/9.5)*(9.5/2+2.88)); V (550.0/13.75)*(13.75/2+2.17)); V
-		return ((size/robotMapSize) * ((robotMapSize/2)+startPos));
+		if(y < 0)
+			y = std::abs(y) + (robotMapSize/2);
+
+		// get the relation size of current x from total size (y/0.025)
+		return y/robotMapResolution;
+	}
+
+	double ConvertXRobotLocationToMapPixel(double robotMapResolution, double robotMapSize, double x)
+	{
+		if(x<0)
+			x = std::abs(x);
+		else
+			x += (robotMapSize/2); // add half from total size when x is positive number
+
+		// get the relation size of current x from total size (x/0.025)
+		return x/robotMapResolution;
 	}
 }
