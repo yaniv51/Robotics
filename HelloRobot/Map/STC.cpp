@@ -30,7 +30,6 @@ void STC::buildGraph()
 		DFS(coarseGraph[i][j], coarseGraph);
 	}
 
-	// buildSTCNodePath(coarseGraph[i][j]);
 	buildFineGraph(fineGrid);
 	//printFullPath(path);
 	//printFullPath(finePath);
@@ -208,6 +207,7 @@ void STC::buildFineGraph(const Grid& fineGrid)
 	//printGraph(fineGraph);
 }
 
+//create go&back path from coarse path (for fine path)
 void STC::buildFinePath()
 {
 	int lastDirection, direction;
@@ -387,19 +387,6 @@ void STC::printGraph(const Node::Graph& myGraph)
 	}
 }
 
-void STC::buildSTCNodePath(Node* currentPos)
-{
-	for(vector<Node*>::iterator itBegin = currentPos->neighborsInTree.begin();
-			itBegin != currentPos->neighborsInTree.end(); itBegin++)
-	{
-		//path.push_back(currentPos->getPosition());
-		nodePath.push_back(*currentPos);
-		buildSTCNodePath((*itBegin));
-	}
-	//path.push_back(currentPos->getPosition());
-	nodePath.push_back(*currentPos);
-}
-
 STC::~STC() {
 	for(int i= 0; i<(int)coarseGraph.size(); i++)
 		for(int j=0; j<(int)coarseGraph[0].size(); j++)
@@ -407,5 +394,4 @@ STC::~STC() {
 	coarseGraph.clear();
 	path.clear();
 	finePath.clear();
-	nodePath.clear();
 }

@@ -31,8 +31,6 @@ private:
 	double _mapResolution;
 	double _robotRowMapSize, _robotColumnMapSize;
 	int robotSizeInCells;
-	const double xFactor = 0.25;
-	const double yFacor = 0.125;
 
 	int getNextDirection(Position currentPos, Position nextPos);
 	void addWayPoint(Position nextPos, int direction);

@@ -25,7 +25,7 @@ private:
 
 public:
 	MapManager(double mapResolution, double robotSize);
-	void buildGraphByMap(const char* mapPath, xyPosition startPosition);
+	void buildGraphByMap(const char* mapPath, xyPosition startPosition, int startColumn, int startRow);
 	Path getFullSTCPath();
 	Map getMap() {return map;}
 	virtual ~MapManager();

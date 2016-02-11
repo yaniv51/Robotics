@@ -7,7 +7,7 @@
 
 #include "RobotManager.h"
 
-RobotManager::RobotManager(Robot* myRobot, ObstacleAvoidance* myObsAvoidance, WaypointManager& wayManager) : wpm(wayManager), driver(robot){
+RobotManager::RobotManager(Robot* myRobot, ObstacleAvoidance* myObsAvoidance, WaypointManager& wayManager) : wpm(wayManager){
 	robot = myRobot;
 	obstacleAvoidance = myObsAvoidance;
 	isRunning = false;
@@ -20,10 +20,12 @@ void RobotManager::Run()
 
 	nextWayPoint = wpm.getNextWayPoint();
 	cout<<"next waypoint: "<<nextWayPoint->x_Coordinate<<","<<nextWayPoint->y_Coordinate<<","<<nextWayPoint->yaw<<endl;
+	//move to start position
 	moveToStartPoint(nextWayPoint);
 	while(wpm.haveMoreWayPoints())
 	{
 		robot->Refresh();
+		cout<<"current position: ["<<robot->GetX()<<","<<robot->GetY()<<","<<robot->GetYaw()<<"]"<<endl;
 		nextWayPoint = wpm.getNextWayPoint();
 		moveRobot(nextWayPoint);
 	}
@@ -100,7 +102,7 @@ void RobotManager::moveToStartPoint(WayPoint* waypoint)
 		yaw = MathHelper::ConvertDegreeToRadian(180);
 
 	xyPosition newPos(x1, y);
-	cout<<"start waypoint 1: "<<x1<<","<<y<<endl;
+	cout<<"start waypoint x: "<<x1<<","<<y<<endl;
 	moveForward(newPos, yaw, 0, true);
 	robot->SetSpeed(0,0);
 
@@ -110,9 +112,10 @@ void RobotManager::moveToStartPoint(WayPoint* waypoint)
 		yaw = MathHelper::ConvertDegreeToRadian(-90);
 
 	xyPosition newPos1(x1, y1);
-	cout<<"start waypoint 2: "<<x1<<","<<y1<<endl;
+	cout<<"start waypoint y: "<<x1<<","<<y1<<endl;
 	moveForward(newPos1, yaw, 0, true);
 	robot->SetSpeed(0,0);
+	cout<<"Reached to start WayPoint destination"<<endl;
 }
 
 void RobotManager::moveForward(xyPosition targetPos, double yaw, int direction, bool yawOnStart) {
@@ -143,10 +146,10 @@ void RobotManager::moveRobot(WayPoint* wayPoint) {
 	double deltaX, deltaY, startX, startY;
 
 	x = wayPoint->x_Coordinate;
-	y = wayPoint->y_Coordinate - yFacor;
+	y = wayPoint->y_Coordinate - Y_FACTOR;
 
 	xyPosition targetPos(x, y);
-	cout<<"next waypoint: "<<x<<","<<y<<","<<MathHelper::ConvertRadianToDegree(wayPoint->yaw)<<". Completed "<<wpm.getCompletedPercent()<<"%"<<endl;
+	cout<<"Total Completed "<<wpm.getCompletedPercent()<<"%"<<endl;
 	getCurrentPos();
 
 	//do not move x,y if smaller than the delta

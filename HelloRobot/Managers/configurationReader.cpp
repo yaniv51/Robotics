@@ -8,6 +8,11 @@
 #include "configurationReader.h"
 
 configurationReader::configurationReader() {
+	startLocation_X = 0;
+	startLocation_Y = 0;
+	startLocation_Yaw = 0;
+	robotSize = 0;
+	MapResolutionCM = 0;
 }
 
 void configurationReader::Read() {
@@ -32,30 +37,18 @@ void configurationReader::Read() {
 			while (ss >> buf)
 				tokens.push_back(buf);
 
-			//cout << tokens.size() << endl;
 			if (token == "map") {
 				map_path = tokens[0];
-				//cout << "the map path is : " + map_path + "\n";
 			} else if (token == "startLocation") {
-				//cout << "hi2" << endl;
-				//cout << tokens[0] << endl;
-				//cout << tokens[1] << endl;
-				//cout << tokens[2] << endl;
 
 				startLocation_X = atoi(tokens[0].c_str());
 				startLocation_Y = atoi(tokens[1].c_str());
 				startLocation_Yaw = atoi(tokens[2].c_str());
 
-				cout << startLocation_X << endl;
-				cout << startLocation_Y << endl;
-				cout << startLocation_Yaw << endl;
-
 			} else if (token == "robotSize") {
 				robotSize = atof(tokens[0].c_str());
-				cout << "robotsize" << robotSize << endl;
 			} else if (token == "MapResolutionCM") {
 				MapResolutionCM = atof(tokens[0].c_str());
-				cout << MapResolutionCM << endl;
 			}
 		}
 	}

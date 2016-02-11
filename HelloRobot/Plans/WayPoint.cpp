@@ -16,7 +16,10 @@ WayPoint::WayPoint(double x, double y, double yaw_angle, int nextDirection) {
 
 WayPoint::WayPoint()
 {
-
+	x_Coordinate = 0;
+	y_Coordinate = 0;
+	yaw = 0;
+	direction = 0;
 }
 
 WayPoint::~WayPoint() {

@@ -70,11 +70,11 @@ void WaypointManager::addWayPoint(Position nextPos, int direction)
 
 	//fix points
 	if(x < 0 && x > -0.5)
-		x += xFactor;
+		x += X_FACTOR;
 	if(x>2.7 && x<2.8)
 	{
-		if(( (float)y-yFacor> 0.1 && (float)y-yFacor<0.2) ||( (float)y-yFacor>-1.1 && (float)y-yFacor<-1.05))
-			x += xFactor;
+		if(( (float)y-Y_FACTOR> 0.1 && (float)y-Y_FACTOR<0.2) ||( (float)y-Y_FACTOR>-1.1 && (float)y-Y_FACTOR<-1.05))
+			x += X_FACTOR;
 	}
 
 	//cout<<"next way point"<<x<<","<<y<<","<<yaw<<endl;

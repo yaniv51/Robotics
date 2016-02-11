@@ -11,14 +11,12 @@
 
 Map::Map(float mapResolution, float robotSize) :
 	mapResolution(mapResolution), robotSize(robotSize) {
-
 	robotSizeInCells = robotSize / mapResolution;
-	//inflationRadius = 0.3 * robotSizeInCells;
-	cout << "inflation radius: " << inflationRadius << endl;
-	cout<<"robot size in cell: "<<robotSizeInCells<<endl;
-
+	inflationRadius = 0;
 	mapHeight = 0;
 	mapWidth = 0;
+	cout << "inflation radius: " << inflationRadius << endl;
+	cout<<"robot size in cell: "<<robotSizeInCells<<endl;
 }
 
 void Map::loadMapFromFile(const char* filePath) {
@@ -166,6 +164,7 @@ void Map::createNewGrid(int radiusFactor, Grid& newGrid, const Grid& oldGrid)
 	}
 }
 
+//first initialization grid
 void Map::initializeGrid(int rows, int columns, Grid& grid)
 {
 	int i, j;
@@ -178,6 +177,7 @@ void Map::initializeGrid(int rows, int columns, Grid& grid)
 			grid[i][j] = true;
 }
 
+//check if area across row,column and given radius is occupied
 bool Map::isFindAreaOccupied(int row, int column, int radius, const Grid& grid)
 {
 	int i, j;
@@ -258,6 +258,7 @@ void Map::addPathToFile(const char* filePath , Node::Graph graph,int Width,int H
 	cout<<"Height " << Hight <<endl;
 	cout<<"Graph length " << graph.size()<<endl;
 
+	//for coarse path - use other color
 	if(coarsePath == true)
 	{
 		factor = 2;

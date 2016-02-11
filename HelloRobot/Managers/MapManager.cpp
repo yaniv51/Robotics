@@ -14,11 +14,11 @@ MapManager::MapManager(double mapResolution, double robotSize) : map(mapResoluti
 
 }
 
-void MapManager::buildGraphByMap(const char* mapPath, xyPosition startPosition)
+void MapManager::buildGraphByMap(const char* mapPath, xyPosition startPosition, int startColumn, int startRow)
 {
 	map.setInflationRadius(_robotSize);
 	map.loadMapFromFile(mapPath);
-	Point newPoint = map.convertPointToCoarsePoint(START_LOCATION_COLUMN, START_LOCATION_ROW);
+	Point newPoint = map.convertPointToCoarsePoint(startColumn, startRow);
 	_startPosition = Position(newPoint.first, newPoint.second);
 
 	stc = new STC(map, _startPosition);
