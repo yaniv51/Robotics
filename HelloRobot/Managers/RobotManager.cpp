@@ -27,6 +27,7 @@ void RobotManager::Run()
 		nextWayPoint = wpm.getNextWayPoint();
 		moveRobot(nextWayPoint);
 	}
+	cout<<"100% completed"<<endl;
 }
 
 void RobotManager::moveToNextYaw(xyPosition targetPos, double yaw)
@@ -145,7 +146,7 @@ void RobotManager::moveRobot(WayPoint* wayPoint) {
 	y = wayPoint->y_Coordinate - yFacor;
 
 	xyPosition targetPos(x, y);
-	cout<<"next waypoint: "<<x<<","<<y<<","<<MathHelper::ConvertRadianToDegree(wayPoint->yaw)<<endl;
+	cout<<"next waypoint: "<<x<<","<<y<<","<<MathHelper::ConvertRadianToDegree(wayPoint->yaw)<<". Completed "<<wpm.getCompletedPercent()<<"%"<<endl;
 	getCurrentPos();
 
 	//do not move x,y if smaller than the delta

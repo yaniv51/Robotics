@@ -40,10 +40,11 @@ private:
 
 
 public:
-	WaypointManager(Path path, double robotMapResolution, double robotRowMapSize, double robotColumnMapSize);
+	WaypointManager(Path path, double robotMapResolution, double robotRowMapSize, double robotColumnMapSize, float robotSize);
 	void buildWaypointVector();
 	WayPoint* getNextWayPoint();
 	bool haveMoreWayPoints();
+	float getCompletedPercent();
 	virtual ~WaypointManager();
 };
 

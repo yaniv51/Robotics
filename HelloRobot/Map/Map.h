@@ -47,6 +47,7 @@ public:
 	Point convertPointToFinePoint(int row, int col);
 	Point convertPointToCoarsePoint(int row, int col);
 	void addPathToFile(const char* filePath, Node::Graph graph,int Width,int Hight, bool coarsePath);
+	void setInflationRadius(float value) {inflationRadius = value * robotSizeInCells;}
 	virtual ~Map();
 };
 

@@ -16,6 +16,7 @@ MapManager::MapManager(double mapResolution, double robotSize) : map(mapResoluti
 
 void MapManager::buildGraphByMap(const char* mapPath, xyPosition startPosition)
 {
+	map.setInflationRadius(_robotSize);
 	map.loadMapFromFile(mapPath);
 	Point newPoint = map.convertPointToCoarsePoint(START_LOCATION_COLUMN, START_LOCATION_ROW);
 	_startPosition = Position(newPoint.first, newPoint.second);

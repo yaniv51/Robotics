@@ -7,25 +7,24 @@
 
 #include "WaypointManager.h"
 
-WaypointManager::WaypointManager(Path path, double robotMapResolution, double robotRowMapSize, double robotColumnMapSize)
+WaypointManager::WaypointManager(Path path, double robotMapResolution, double robotRowMapSize, double robotColumnMapSize, float robotSize)
 {
 	_stc_path = path;
 	_mapResolution = robotMapResolution;
 	_robotRowMapSize = robotRowMapSize;
 	_robotColumnMapSize = robotColumnMapSize;
 	currentWayPoint = 0;
-	robotSizeInCells = (float)ROBOT_SIZE / (float)robotMapResolution;
+	robotSizeInCells = robotSize / (float)robotMapResolution;
 }
 
 
 void WaypointManager::buildWaypointVector()
 {
-	int nextDirection, lastDirection;
+	int nextDirection;
 
-	cout<<"stc size: "<< _stc_path.size()<<endl;
+	cout<<"STC size: "<< _stc_path.size()<<endl;
 	for (unsigned int i = 0; i < _stc_path.size()-1; i++)
 	{
-		int size = _stc_path.size();
 		nextDirection = getNextDirection(_stc_path.at(i), _stc_path.at(i+1));
 		addWayPoint(_stc_path.at(i), nextDirection);
 	}
@@ -46,8 +45,8 @@ void WaypointManager::addWayPoint(Position nextPos, int direction)
 	x = nextPos.second*robotSizeInCells;
 
 	//convert pixel point to map point
-	x = MathHelper::ConvertMapPixelToX(MAP_RESOLUTION, MAP_ROW_SIZE*MAP_RESOLUTION, x);
-	y = MathHelper::ConvertMapPixelToY(MAP_RESOLUTION, MAP_COLUMN_SIZE*MAP_RESOLUTION, y);
+	x = MathHelper::ConvertMapPixelToX(_mapResolution, MAP_ROW_SIZE*_mapResolution, x);
+	y = MathHelper::ConvertMapPixelToY(_mapResolution, MAP_COLUMN_SIZE*_mapResolution, y);
 
 	switch(direction)
 	{
@@ -117,12 +116,19 @@ WayPoint* WaypointManager::getNextWayPoint()
 	return nextWayPoint;
 }
 
+float WaypointManager::getCompletedPercent()
+{
+	return ((float)(currentWayPoint-1)/(float)wayPoints.size())*100;
+}
+
 bool WaypointManager::haveMoreWayPoints()
 {
 	if(currentWayPoint < (int)wayPoints.size())
 		return true;
 	return false;
 }
+
+
 
 WaypointManager::~WaypointManager() {
 	for(unsigned int i = 0; i< wayPoints.size(); i++)

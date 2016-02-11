@@ -38,8 +38,8 @@ void Driver::moveRobot(WayPoint* wayPoint) {
 	double x,y;
 
 	//way point is with row, column pixel -> need to change to x,y
-	x = MathHelper::ConvertMapPixelToX(MAP_RESOLUTION, MAP_ROW_SIZE*MAP_RESOLUTION, wayPoint->x_Coordinate);
-	y = MathHelper::ConvertMapPixelToY(MAP_RESOLUTION, MAP_COLUMN_SIZE*MAP_RESOLUTION, wayPoint->y_Coordinate);
+	//x = MathHelper::ConvertMapPixelToX(MAP_RESOLUTION, MAP_ROW_SIZE*MAP_RESOLUTION, wayPoint->x_Coordinate);
+	//y = MathHelper::ConvertMapPixelToY(MAP_RESOLUTION, MAP_COLUMN_SIZE*MAP_RESOLUTION, wayPoint->y_Coordinate);
 
 	xyPosition targetPos(x, y);
 	moveForward(targetPos, wayPoint->yaw, wayPoint->direction);

@@ -12,10 +12,12 @@
 #include "RobotSettings.h"
 #include "../Helper/MathHelper.h"
 #include "Laser.h"
+#include "../Helper/Defines.h"
 #include <math.h>
 #include <unistd.h>
 
 using namespace std;
+using namespace Defines;
 using namespace PlayerCc;
 
 
@@ -28,8 +30,7 @@ private:
 	SonarProxy *sp;
 
 public:
-	//Robot(PlayerClient* player, Position2dProxy* posProxy, Laser* laserProxy);
-	Robot(const char* hostName, const int port, int startPosX, int startPosY);
+	Robot(const char* hostName, const int port, xyPosition startPos, double startYaw);
 	double GetLaserProxyDistance(int index);
 	double GetX();
 	double GetY();

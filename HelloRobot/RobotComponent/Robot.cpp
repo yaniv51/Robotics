@@ -7,9 +7,9 @@
 
 #include "Robot.h"
 
-Robot::Robot(const char* hostName, const int port, int startPosX, int startPosY)
+Robot::Robot(const char* hostName, const int port, xyPosition startPos, double startYaw)
 {
-	double startX, startY, startYaw; //pose [2.175 -2.875 45]
+	//double startX, startY, startYaw; //pose [2.175 -2.875 45]
 
 	pc = new PlayerClient(hostName, port);
 	pp = new Position2dProxy(pc,0);
@@ -18,13 +18,13 @@ Robot::Robot(const char* hostName, const int port, int startPosX, int startPosY)
 	laserHelper = new Laser(lp);
 
 	//initialize start location
-	startX = 2.175;
+	/*startX = 2.175;
 	startY = -2.875;
-	startYaw = 45;
+	startYaw = 45;*/
 	startYaw = MathHelper::ConvertDegreeToRadian(startYaw);
 
 	pp->SetMotorEnable(true); //for real robot - must use this command for start moving
-	pp->SetOdometry(startX,startY,startYaw);
+	pp->SetOdometry(startPos.first,startPos.second,startYaw);
 
 	//for remove old values
 		for(int i = 0; i < 15; i++)

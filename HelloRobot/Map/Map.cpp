@@ -13,7 +13,7 @@ Map::Map(float mapResolution, float robotSize) :
 	mapResolution(mapResolution), robotSize(robotSize) {
 
 	robotSizeInCells = robotSize / mapResolution;
-	inflationRadius = 0.3 * robotSizeInCells;
+	//inflationRadius = 0.3 * robotSizeInCells;
 	cout << "inflation radius: " << inflationRadius << endl;
 	cout<<"robot size in cell: "<<robotSizeInCells<<endl;
 
