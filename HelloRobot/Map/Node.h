@@ -28,8 +28,6 @@ public:
 
 	Node(int row, int col, bool isWall);
 	Position getPosition();
-	Position getForwardPosition();
-	Position getBackwardPosision();
 	void setCameFrom(Node* father) {cameFrom = father;}
 	void addNeighbor(Node* newNeighbor);
 	virtual ~Node();

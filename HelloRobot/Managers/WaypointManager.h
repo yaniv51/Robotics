@@ -10,6 +10,7 @@
 
 #include <vector>
 #include <math.h>
+#include <cmath>
 #include <iostream>
 #include "../Plans/WayPoint.h"
 #include "../RobotComponent/RobotSettings.h"
@@ -26,18 +27,16 @@ class WaypointManager {
 private:
 	Path _stc_path;
 	vector<WayPoint*> wayPoints;
-	bool is_verticle;
 	int currentWayPoint;
 	double _mapResolution;
 	double _robotRowMapSize, _robotColumnMapSize;
 	int robotSizeInCells;
+	const double xFactor = 0.25;
+	const double yFacor = 0.125;
 
 	int getNextDirection(Position currentPos, Position nextPos);
 	void addWayPoint(Position nextPos, int direction);
 	Point convertFinePointToMapPixel(int row, int col);
-
-	//double calc_yaw(double m, Node node_from, Node node_to);
-	//double calc_incline(Node node_from, Node node_to);
 
 
 public:
@@ -45,9 +44,6 @@ public:
 	void buildWaypointVector();
 	WayPoint* getNextWayPoint();
 	bool haveMoreWayPoints();
-
-	//void setNextWayPoint(WayPoint Next);
-	//bool isInWayPoint(double x,double y);
 	virtual ~WaypointManager();
 };
 

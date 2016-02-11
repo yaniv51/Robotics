@@ -27,6 +27,7 @@ int main(int argc, char** argv)
 	MapManager mapManager(MAP_RESOLUTION, ROBOT_SIZE);
 	Point FinePos = mapManager.getMap().convertPointToFinePoint(START_LOCATION_COLUMN, START_LOCATION_ROW);
 	Robot myRobot("localhost", 6665, (double)FinePos.first, (double)FinePos.second);
+	//Robot myRobot("localhost", 6665, (double)0, (double)0);
 	ObstacleAvoidance obstacleAvoidence(&myRobot, myRobot.GetLaserHelper());
 
 	mapManager.buildGraphByMap(filePath, startPos);
@@ -34,14 +35,6 @@ int main(int argc, char** argv)
 	WaypointManager wpm(mapManager.getFullSTCPath(), MAP_RESOLUTION, MAP_ROW_SIZE*MAP_RESOLUTION,MAP_COLUMN_SIZE*MAP_RESOLUTION);
 	wpm.buildWaypointVector();
 
-	//RobotManager manager(&myRobot, &obstacleAvoidence, wpm);
-	//manager.Run();
-	/*
-	Robot robot("localhost", 6665);
-	Driver driver(robot);
-	Path path;
-	driver.moveRobot(path);
-
-	return 0;
-	 */
+	RobotManager manager(&myRobot, &obstacleAvoidence, wpm);
+	manager.Run();
 }

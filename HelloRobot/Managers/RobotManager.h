@@ -21,14 +21,20 @@ private:
 	WaypointManager& wpm;
 	Driver driver;
 
-	const double linearTolerance = 0.01;
-	const double linearSpeed = 0.6;
+	const double linearTolerance = 0.018;
+	const double linearSpeed = 0.3;
+	const double yawTolerance = 0.01;
+	const double deltaTolerance = 0.02;
+	const double xFactor = 0.25;
+	const double yFacor = 0.125;
 
 	xyPosition currPos;
 
 	void moveRobot(WayPoint* wayPoint);
-	void moveForward(xyPosition targetPos, double yaw, int direction);
+	void moveForward(xyPosition targetPos, double yaw, int direction, bool yawOnStart);
 	void getCurrentPos();
+	void moveToNextYaw(xyPosition targetPos, double yaw);
+	void moveToStartPoint(WayPoint* waypoint);
 
 public:
 	void Run();

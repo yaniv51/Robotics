@@ -22,12 +22,14 @@ void WaypointManager::buildWaypointVector()
 {
 	int nextDirection, lastDirection;
 
+	cout<<"stc size: "<< _stc_path.size()<<endl;
 	for (unsigned int i = 0; i < _stc_path.size()-1; i++)
 	{
 		int size = _stc_path.size();
 		nextDirection = getNextDirection(_stc_path.at(i), _stc_path.at(i+1));
 		addWayPoint(_stc_path.at(i), nextDirection);
 	}
+	cout<<"way points size: "<<wayPoints.size()<<endl;
 }
 
 Point WaypointManager::convertFinePointToMapPixel(int row, int col)
@@ -40,13 +42,12 @@ void WaypointManager::addWayPoint(Position nextPos, int direction)
 {
 	double x, y, yaw;
 
-	//convert fine point to map point
-	//x = MathHelper::ConvertXRobotLocationToMapPixel(_mapResolution, _robotRowMapSize, nextPos.first);
-	//y = MathHelper::ConvertYRobotLocationToMapPixel(_mapResolution, _robotColumnMapSize, nextPos.second);
-
 	y = nextPos.first*robotSizeInCells;
 	x = nextPos.second*robotSizeInCells;
 
+	//convert pixel point to map point
+	x = MathHelper::ConvertMapPixelToX(MAP_RESOLUTION, MAP_ROW_SIZE*MAP_RESOLUTION, x);
+	y = MathHelper::ConvertMapPixelToY(MAP_RESOLUTION, MAP_COLUMN_SIZE*MAP_RESOLUTION, y);
 
 	switch(direction)
 	{
@@ -54,7 +55,7 @@ void WaypointManager::addWayPoint(Position nextPos, int direction)
 		yaw = MathHelper::ConvertDegreeToRadian(90);
 		break;
 	case MOVING_DOWN:
-		yaw = MathHelper::ConvertDegreeToRadian(270);
+		yaw = MathHelper::ConvertDegreeToRadian(-90);
 		break;
 	case MOVING_RIGHT:
 		yaw = MathHelper::ConvertDegreeToRadian(0);
@@ -62,6 +63,19 @@ void WaypointManager::addWayPoint(Position nextPos, int direction)
 	case MOVING_LEFT:
 		yaw = MathHelper::ConvertDegreeToRadian(180);
 		break;
+	}
+
+	//if last yaw is equal to next yaw - can ignre the way point
+	if(wayPoints.size() > 0 && wayPoints[wayPoints.size()-1]->yaw == yaw)
+		return;
+
+	//fix points
+	if(x < 0 && x > -0.5)
+		x += xFactor;
+	if(x>2.7 && x<2.8)
+	{
+		if(( (float)y-yFacor> 0.1 && (float)y-yFacor<0.2) ||( (float)y-yFacor>-1.1 && (float)y-yFacor<-1.05))
+			x += xFactor;
 	}
 
 	//cout<<"next way point"<<x<<","<<y<<","<<yaw<<endl;
@@ -98,118 +112,17 @@ int WaypointManager::getNextDirection(Position currentPos, Position nextPosition
 
 WayPoint* WaypointManager::getNextWayPoint()
 {
-	WayPoint* nextWayPoint = wayPoints.at(currentWayPoint+1);
+	WayPoint* nextWayPoint = wayPoints.at(currentWayPoint);
 	currentWayPoint = currentWayPoint+1;
 	return nextWayPoint;
 }
 
 bool WaypointManager::haveMoreWayPoints()
 {
-	if(currentWayPoint < wayPoints.size())
+	if(currentWayPoint < (int)wayPoints.size())
 		return true;
 	return false;
 }
-
-/*double WaypointManager::calc_yaw(double m, Node node_from, Node node_to)
-{
-	double angle;
-
-	if(!is_verticle)
-	{
-		angle = 180 * atan(m) / M_PI;
-	}
-
-	if (is_verticle)
-	{
-		if (node_to.row > node_from.row)
-		{
-			return (270);
-		}
-		else
-		{
-			return (90);
-		}
-	}
-	else if ( m == 0)
-	{
-		if (node_to.col > node_from.col)
-		{
-			return (angle);
-		}
-		else
-		{
-			return (180 + angle);
-		}
-	}
-	else if (m > 0)
-	{
-		if (node_to.row > node_from.row)
-		{
-			return (360 - angle);
-		}
-		else
-		{
-			return (180 - angle);
-		}
-	}
-	else
-	{
-		if (node_to.row > node_from.row)
-		{
-			return (180 + angle);
-		}
-		else
-		{
-			return (angle);
-		}
-	}
-}
-
-double WaypointManager::calc_incline(Node node_from, Node node_to)
-{
-	is_verticle = 0;
-	if(node_from.col == node_to.col)
-	{
-		is_verticle = 1;
-		return(9999);
-	}
-	else
-	{
-		return((node_to.row - node_from.row) / (node_to.col - node_from.col));
-	}
-}
-
-void WaypointManager::setNextWayPoint(WayPoint Next)
-{
-	currWayPoint.x_Coordinate = nextWayPoint.x_Coordinate;
-	currWayPoint.y_Coordinate = nextWayPoint.y_Coordinate;
-	currWayPoint.yaw = nextWayPoint.yaw;
-
-	nextWayPoint.x_Coordinate = Next.x_Coordinate;
-	nextWayPoint.y_Coordinate = Next.y_Coordinate;
-	nextWayPoint.yaw = Next.yaw;
-}*/
-
-/*bool WaypointManager::isInWayPoint(double x,double y)
-{
-	double dx = nextWayPoint.x_Coordinate - x;
-	double dy = nextWayPoint.y_Coordinate - y;
-	double distance = sqrt(pow(dx, 2) + pow(dy, 2));
-
-	cout << "Next way point x: "<< nextWayPoint.x_Coordinate << " ---> current x: " << x << endl;
-	cout << "Next way point y: "<< nextWayPoint.y_Coordinate << " ---> current y: " << y << endl;
-	cout << "Next way point yaw" << nextWayPoint.yaw <<  endl;
-	cout << "Distance to next way point: " << (distance) << endl;
-	cout << endl;
-
-	// Checking if the robot hit the way point, considering tolerance
-	if (distance*_mapResolution <= TOLERANCE)
-	{
-		return true;
-	}
-	return false;
-}*/
-
 
 WaypointManager::~WaypointManager() {
 	for(unsigned int i = 0; i< wayPoints.size(); i++)

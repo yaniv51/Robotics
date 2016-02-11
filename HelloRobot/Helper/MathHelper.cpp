@@ -37,6 +37,10 @@ namespace MathHelper
 
 		if(result > robotMapSize/2)
 			result =result*(-1) + (robotMapSize/2);
+		else
+		{
+			result = (robotMapSize/2) - result;
+		}
 
 		return result;
 	}
@@ -57,8 +61,8 @@ namespace MathHelper
 		double result;
 
 		result = xPixel*robotMapResolution;
-		if(result< robotMapSize/2) //negetive number
-			result*=-1;
+		if(result< robotMapSize/2)
+			result= -(result*-1 + robotMapSize/2);
 		else
 			result -= (robotMapSize/2);
 

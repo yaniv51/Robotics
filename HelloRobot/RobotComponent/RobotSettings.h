@@ -14,8 +14,8 @@
 
 #define SAMPLES 666
 #define LINEAR_SPEED 0.12
-#define LEFT_ANGULAR_SPEED 0.5
-#define RIGHT_ANGULAR_SPEED -0.5
+#define LEFT_ANGULAR_SPEED 0.18
+#define RIGHT_ANGULAR_SPEED -0.18
 #define MIN_DEST_FROM_OBSTACLE 0.6 //check 0.5
 #define MAX_RANGE 4.095
 
@@ -42,5 +42,10 @@
 #define MOVING_DOWN 	2
 #define MOVING_LEFT 	3
 #define MOVING_RIGHT 	4
+
+#define LOOK_UP 90
+#define LOOK_RIGHT 0
+#define LOOK_LEFT 180
+#define LOOK_DOWN -90
 
 #endif /* ROBOTSETTINGS_H_ */
